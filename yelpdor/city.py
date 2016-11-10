@@ -17,6 +17,8 @@ class District:
         Number of Businesses in the District
     distribution: list of floats (length 5)
         Probability of businesses having true score means with the values [1, 2, 3, 4, 5], respectively.
+    review_count_mean: int
+        mean for generating review count
     """
 
     def __init__(self, count=BIZ_COUNT, distribution=BIZ_TRUE_RATING_DISTRIBUTION, review_count_mean=REVIEW_COUNT_MEAN):
@@ -87,8 +89,10 @@ class Business:
 class Restaurant(Business):
     """A Restaurant with its true scores, category, reviews, etc.
 
-    mean: int in range(2, 11), i.e. twice a star rating
+    mean: int in range(1,6)
         The true overall rating of a Restaurant
+    review_count_mean: int
+        mean for generating review count
     """
 
     ordered_facets = ['Food/Drinks', 'Service', 'Cleanliness'] # ordered for display
@@ -105,6 +109,7 @@ class Restaurant(Business):
         self.aggregated_overall_rating = self.aggregate_overall_reviews()
         self.rounded_aggregated_overall_rating = int(round(self.aggregated_overall_rating))
         self.max_player_review_difference = 4.0 * len(self.ordered_facets)
+        self.attributes = [] # not yet implemented
 
     def __repr__(self):
         return '\n'.join([
@@ -116,8 +121,8 @@ class Restaurant(Business):
                 format_rating(self.rounded_aggregated_overall_rating), self.review_count),
             '\n'.join(['> {}: {}'.format(
                 facet, format_rating(self.rounded_aggregated_facet_ratings[facet])) for facet in self.ordered_facets]),
-            'Reviews:',
-            '\n'.join(['> Review {}\n{}'.format(i+1, review) for i, review in enumerate(self.reviews)])
+            'Check business.reviews to see individual reviews.'
+            # '\n'.join(['> Review {}\n{}'.format(i+1, review) for i, review in enumerate(self.reviews)])
             ])
 
 
