@@ -61,6 +61,7 @@ dungeon_objects = [player]
 
 dungeon_map = generate_city_map(MAP_WIDTH, MAP_HEIGHT)
 player.x, player.y = dungeon_map.spawn
+dungeon_map.init_fov_map()
 screen = Screen(width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
 camera = Camera(CAMERA_WIDTH, CAMERA_HEIGHT, dungeon_map) 
 renderer = Renderer(console, screen, camera)
