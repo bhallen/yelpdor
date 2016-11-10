@@ -12,17 +12,23 @@ MAX_ROOMS = 30
 class DungeonMap:
     MAP_WIDTH=128
     MAP_HEIGHT=128
-    __dmap__ = [] 
+    __map__ = [] 
+    rooms = []
 
     def __init__(self, width, height):
         self.MAP_WIDTH = width
         self.MAP_HEIGHT = height
 
-        self.__dmap__ = [ [Tile(True) for y in range(height) ] for x in range(width) ]
+        self.__map__ = [ [Tile(True) for y in range(height) ] for x in range(width) ]
  
 
     def __getitem__(self, key):
-        return self.__dmap__[key]
+        return self.__map__[key]
+
+
+
+
+
 
 def create_room(dmap, room):
     #go through the tiles in the rectangle and make them passable
@@ -52,7 +58,6 @@ def make_map(player, height, width):
     #fill map with "blocked" tiles
     dmap = DungeonMap(width, height)
 
-    rooms = []
     num_rooms = 0
  
     for r in range(MAX_ROOMS):
@@ -68,7 +73,7 @@ def make_map(player, height, width):
  
         #run through the other rooms and see if they intersect with this one
         failed = False
-        for other_room in rooms:
+        for other_room in dmap.rooms:
             if new_room.intersect(other_room):
                 failed = True
                 break
@@ -91,7 +96,7 @@ def make_map(player, height, width):
                 #connect it to the previous room with a tunnel
  
                 #center coordinates of previous room
-                (prev_x, prev_y) = rooms[num_rooms-1].center()
+                (prev_x, prev_y) = dmap.rooms[num_rooms-1].center()
  
                 #draw a coin (random number that is either 0 or 1)
                 if libtcod.random_get_int(0, 0, 1) == 1:
@@ -104,7 +109,7 @@ def make_map(player, height, width):
                     create_h_tunnel(dmap, prev_x, new_x, new_y)
  
             #finally, append the new room to the list
-            rooms.append(new_room)
+            dmap.rooms.append(new_room)
             num_rooms += 1
 
     return dmap
