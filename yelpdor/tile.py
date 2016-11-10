@@ -29,8 +29,7 @@ class TileType:
     floor = 1
     wall = 2
     street = 3
-    sidewalk = 4
-    door = 5
+    door = 4
     
 
 class Tile:

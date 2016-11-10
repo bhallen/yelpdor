@@ -13,39 +13,31 @@ def generate_city_map(width, height):
 
     dmap = DungeonMap(width, height)
 
-    def draw_street(start, end, street_size=1, sidewalk_size=1):
+    def draw_street(start, end, size=2):
         # draws a street from start to end, inclusive
-        # there are street_size street tiles both left and right of center
-        # and sidewalks are sidewalk_size wide
-        # does not overwrite existing street tiles with sidewalk tiles
+        # there are size street tiles both left and right of center
         start_x, start_y = start
         end_x, end_y = end
 
         if start_x == end_x:
             for y in range(start_y, end_y + 1):
                 for x in range(
-                    start_x - street_size - sidewalk_size,
-                    start_x + street_size + sidewalk_size + 1
+                    start_x - size,
+                    start_x + size + 1
                 ):
                     if not dmap.within_map(x, y):
                         continue
-                    if abs(x - start_x) <= street_size:
-                        dmap[x][y] = create_tile(TileType.street)
-                    elif not dmap[x][y].tile_type == TileType.street:
-                        dmap[x][y] = create_tile(TileType.sidewalk)
+                    dmap[x][y] = create_tile(TileType.street)
         elif start_y == end_y:
             # (I'm sure there's a nice way to deduplicate this code, but s/x/y is easier)
             for x in range(start_x, end_x + 1):
                 for y in range(
-                    start_y - street_size - sidewalk_size,
-                    start_y + street_size + sidewalk_size + 1
+                    start_y - size,
+                    start_y + size + 1
                 ):
                     if not dmap.within_map(x, y):
                         continue
-                    if abs(y - start_y) <= street_size:
-                        dmap[x][y] = create_tile(TileType.street)
-                    elif not dmap[x][y].tile_type == TileType.street:
-                        dmap[x][y] = create_tile(TileType.sidewalk)
+                    dmap[x][y] = create_tile(TileType.street)
 
     blocks = []
 
@@ -53,19 +45,19 @@ def generate_city_map(width, height):
 
     def streetify_rect(rect):
         if rect.w < 2 * MIN_BLOCK_SIZE and rect.h < 2 * MIN_BLOCK_SIZE:
-            # find the edges of the sidewalk
+            # find the adjacent streets
             x1, y1 = rect.center()
             x2, y2 = x1, y1
-            while dmap.within_map(x1, y1) and dmap[x1][y1].tile_type != TileType.sidewalk:
+            while dmap.within_map(x1, y1) and dmap[x1][y1].tile_type != TileType.street:
                 x1 -= 1
             x1 += 1
-            while dmap.within_map(x1, y1) and dmap[x1][y1].tile_type != TileType.sidewalk:
+            while dmap.within_map(x1, y1) and dmap[x1][y1].tile_type != TileType.street:
                 y1 -= 1
             y1 += 1
-            while dmap.within_map(x2, y2) and dmap[x2][y2].tile_type != TileType.sidewalk:
+            while dmap.within_map(x2, y2) and dmap[x2][y2].tile_type != TileType.street:
                 x2 += 1
             x2 -= 1
-            while dmap.within_map(x2, y2) and dmap[x2][y2].tile_type != TileType.sidewalk:
+            while dmap.within_map(x2, y2) and dmap[x2][y2].tile_type != TileType.street:
                 y2 += 1
             y2 -= 1
             blocks.append(Rect(x1, y1, x2 - x1, y2 - y1))
@@ -93,27 +85,19 @@ def generate_city_map(width, height):
 
     streetify_rect(Rect(0, 0, width, height))
 
-    def wall_block(rect):
-        for y in range(rect.y1, rect.y2 + 1):
-            for x in range(rect.x1, rect.x2 + 1):
-                if y == rect.y1 or y == rect.y2 or x == rect.x1 or x == rect.x2:
-                    dmap[x][y] = create_tile(TileType.wall)
+    dmap.rooms = []
 
     for block in blocks:
-        wall_block(block)
-
-    # for y in range(height):
-    #     row = ''
-    #     for x in range(width):
-    #         t = dmap[x][y].tile_type
-    #         if t == TileType.street:
-    #             row += ' '
-    #         elif t == TileType.sidewalk:
-    #             row += '.'
-    #         elif t == TileType.floor:
-    #             row += '+'
-    #         else:
-    #             row += '#'
-    #     print(row)
+        wall_locs = []
+        for y in range(block.y1, block.y2 + 1):
+            for x in range(block.x1, block.x2 + 1):
+                if y == block.y1 or y == block.y2 or x == block.x1 or x == block.x2:
+                    dmap[x][y] = create_tile(TileType.wall)
+                    wall_locs.append((x, y))
+                else:
+                    dmap[x][y] = create_tile(TileType.floor)
+        door_x, door_y = random.choice(wall_locs)
+        dmap[door_x][door_y] = create_tile(TileType.door)
+        dmap.rooms.append(Rect(block.x1 + 1, block.y1 + 1, block.w - 2, block.h - 2))
 
     return dmap
