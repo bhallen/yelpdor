@@ -3,41 +3,48 @@ import libtcodpy as libtcod
 from yelpdor.tile import Tile
 from yelpdor.game_obj import GameObj
 from yelpdor.simple_dungeon import make_map
-
+from yelpdor.renderer import Camera
 
 
 #size of the map
-MAP_WIDTH = 80
-MAP_HEIGHT = 45
+MAP_HEIGHT = 128
+MAP_WIDTH = 128 
  
 #actual size of the window
-SCREEN_WIDTH = 80
-SCREEN_HEIGHT = 50
+SCREEN_HEIGHT = 64 
+SCREEN_WIDTH = 64
+
+CAMERA_HEIGHT = 64 
+CAMERA_WIDTH = 64
  
 LIMIT_FPS = 20  #20 frames-per-second maximum
- 
  
 color_dark_wall = libtcod.Color(0, 0, 100)
 color_dark_ground = libtcod.Color(50, 50, 150)
  
  
-def render_all():
-    global color_light_wall
-    global color_light_ground
- 
+def render_all(camera, player):
     #go through all tiles, and set their background color
-    for y in range(MAP_HEIGHT):
-        for x in range(MAP_WIDTH):
-            wall = dmap[x][y].block_sight
+
+    camera.move(player.x, player.y)
+
+    for x in range(camera.width):
+        for y in range(camera.height):
+            (map_x, map_y) = (camera.x + x, camera.y + y)
+
+            wall = dmap[map_x][map_y].block_sight
             if wall:
-                libtcod.console_set_char_background(con, x, y, color_dark_wall, libtcod.BKGND_SET )
+                libtcod.console_set_char_background(con, x, y, color_dark_wall, libtcod.BKGND_SET)
             else:
-                libtcod.console_set_char_background(con, x, y, color_dark_ground, libtcod.BKGND_SET )
+                libtcod.console_set_char_background(con, x, y, color_dark_ground, libtcod.BKGND_SET)
+
+            for obj in objects:
+                if obj != player:
+                    obj.draw(con)
+            player.draw(con)
+
  
-    #draw all objects in the list
-    for go in objects:
-        go.draw(con)
- 
+
     #blit the contents of "con" to the root console
     libtcod.console_blit(con, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0)
  
@@ -85,13 +92,14 @@ npc = GameObj(SCREEN_WIDTH/2 - 5, SCREEN_HEIGHT/2, '@', libtcod.yellow)
 objects = [npc, player]
  
 #generate map (at this point it's not drawn to the screen)
-dmap = make_map(player, MAP_HEIGHT, MAP_WIDTH)
- 
+dmap = make_map(player, MAP_WIDTH, MAP_HEIGHT)
+
+camera = Camera(CAMERA_WIDTH, CAMERA_HEIGHT, dmap) 
  
 while not libtcod.console_is_window_closed():
  
     #render the screen
-    render_all()
+    render_all(camera, player)
  
     libtcod.console_flush()
  

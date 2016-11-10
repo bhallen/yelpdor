@@ -5,14 +5,14 @@ from tile import Rect
 
 
 class DungeonMap:
-    MAP_WIDTH=128
-    MAP_HEIGHT=128
+    width=128
+    height=128
     __map__ = [] 
     rooms = []
 
     def __init__(self, width, height):
-        self.MAP_WIDTH = width
-        self.MAP_HEIGHT = height
+        self.width = width
+        self.height = height
 
         self.__map__ = [ [Tile(True) for y in range(height) ] for x in range(width) ]
  
