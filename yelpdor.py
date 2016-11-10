@@ -2,7 +2,9 @@ import libtcodpy as libtcod
 
 from yelpdor.tile import Tile
 from yelpdor.game_obj import GameObj
-from yelpdor.dungeon_map import make_map
+from yelpdor.simple_dungeon import make_map
+
+
 
 #size of the map
 MAP_WIDTH = 80
@@ -94,8 +96,8 @@ while not libtcod.console_is_window_closed():
     libtcod.console_flush()
  
     #erase all objects at their old locations, before they move
-    for object in objects:
-        object.clear(con)
+    for obj in objects:
+        obj.clear(con)
  
     #handle keys and exit game if needed
     exit = handle_keys()
