@@ -19,18 +19,18 @@ color_dark_ground = libtcod.Color(50, 50, 150)
  
  
 def make_map():
-    global map
+    global dmap
  
     #fill map with "unblocked" tiles
-    map = [[ Tile(False)
+    dmap = [[ Tile(False)
         for y in range(MAP_HEIGHT) ]
             for x in range(MAP_WIDTH) ]
  
     #place two pillars to test the map
-    map[30][22].blocked = True
-    map[30][22].block_sight = True
-    map[50][22].blocked = True
-    map[50][22].block_sight = True
+    dmap[30][22].blocked = True
+    dmap[30][22].block_sight = True
+    dmap[50][22].blocked = True
+    dmap[50][22].block_sight = True
  
  
 def render_all():
@@ -40,7 +40,7 @@ def render_all():
     #go through all tiles, and set their background color
     for y in range(MAP_HEIGHT):
         for x in range(MAP_WIDTH):
-            wall = map[x][y].block_sight
+            wall = dmap[x][y].block_sight
             if wall:
                 libtcod.console_set_char_background(con, x, y, color_dark_wall, libtcod.BKGND_SET )
             else:
@@ -66,16 +66,16 @@ def handle_keys():
  
     #movement keys
     if libtcod.console_is_key_pressed(libtcod.KEY_UP):
-        player.move(0, -1)
+        player.move(dmap, 0, -1)
  
     elif libtcod.console_is_key_pressed(libtcod.KEY_DOWN):
-        player.move(0, 1)
+        player.move(dmap, 0, 1)
  
     elif libtcod.console_is_key_pressed(libtcod.KEY_LEFT):
-        player.move(-1, 0)
+        player.move(dmap, -1, 0)
  
     elif libtcod.console_is_key_pressed(libtcod.KEY_RIGHT):
-        player.move(1, 0)
+        player.move(dmap, 1, 0)
  
  
 #############################################
