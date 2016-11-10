@@ -1,8 +1,6 @@
 import numpy.random
 from collections import defaultdict
 
-import libtcodpy
-
 BIZ_COUNT = 10
 BIZ_TRUE_RATING_DISTRIBUTION = [0.2, 0.2, 0.2, 0.2, 0.2]
 
@@ -11,12 +9,6 @@ FACET_REVIEW_SD = 2.
 REVIEW_COUNT_SD = 5
 
 REVIEW_COUNT_MEAN = 3
-
-NAME_TEMPLATES = [
-    "Gary Spanko",
-    "{name}'s {food} Shop",
-    ""
-]
 
 class District:
     """A level or floor of the city containing Businesses.
@@ -148,5 +140,3 @@ def format_rating(rating):
 if __name__ == "__main__":
     d = District()
     print(d)
-
-    print(libtcodpy.namegen_generate('celtic female'))
