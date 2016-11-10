@@ -2,7 +2,9 @@ from lib import libtcodpy as libtcod
 
 from yelpdor.game_obj import GameObj
 from yelpdor.simple_dungeon import make_map
-from yelpdor.renderer import Camera
+from yelpdor.renderer import Renderer
+from yelpdor.renderer import Screen 
+from yelpdor.camera import Camera
 
 
 #size of the map
@@ -18,31 +20,6 @@ CAMERA_WIDTH = 64
  
 LIMIT_FPS = 20  #20 frames-per-second maximum
  
-color_dark_wall = libtcod.Color(0, 0, 100)
-color_dark_ground = libtcod.Color(50, 50, 150)
- 
- 
-def render_all(camera, player):
-    #go through all tiles, and set their background color
-
-    camera.move(player.x, player.y)
-
-    for x in range(camera.width):
-        for y in range(camera.height):
-            (map_x, map_y) = (camera.x + x, camera.y + y)
-
-            wall = dmap[map_x][map_y].block_sight
-            if wall:
-                libtcod.console_set_char_background(con, x, y, color_dark_wall, libtcod.BKGND_SET)
-            else:
-                libtcod.console_set_char_background(con, x, y, color_dark_ground, libtcod.BKGND_SET)
-
-            for obj in objects:
-                if obj != player:
-                    obj.draw(con, camera)
-            player.draw(con, camera)
-
-    libtcod.console_blit(con, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0)
  
 def handle_keys():
     #key = libtcod.console_check_for_keypress()  #real-time
@@ -57,16 +34,16 @@ def handle_keys():
  
     #movement keys
     if libtcod.console_is_key_pressed(libtcod.KEY_UP):
-        player.move(dmap, 0, -1)
+        player.move(dungeon_map, 0, -1)
  
     elif libtcod.console_is_key_pressed(libtcod.KEY_DOWN):
-        player.move(dmap, 0, 1)
+        player.move(dungeon_map, 0, 1)
  
     elif libtcod.console_is_key_pressed(libtcod.KEY_LEFT):
-        player.move(dmap, -1, 0)
+        player.move(dungeon_map, -1, 0)
  
     elif libtcod.console_is_key_pressed(libtcod.KEY_RIGHT):
-        player.move(dmap, 1, 0)
+        player.move(dungeon_map, 1, 0)
  
  
 #############################################
@@ -76,23 +53,21 @@ def handle_keys():
 libtcod.console_set_custom_font('res/arial10x10.png', libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_TCOD)
 libtcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT, 'python/libtcod tutorial', False)
 libtcod.sys_set_fps(LIMIT_FPS)
-con = libtcod.console_new(SCREEN_WIDTH, SCREEN_HEIGHT)
+console = libtcod.console_new(SCREEN_WIDTH, SCREEN_HEIGHT)
  
 player = GameObj(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, '@', libtcod.white)
- 
-objects = [player]
- 
-dmap = make_map(player, MAP_WIDTH, MAP_HEIGHT)
+dungeon_objects = [player]
 
-camera = Camera(CAMERA_WIDTH, CAMERA_HEIGHT, dmap) 
+dungeon_map = make_map(player, MAP_WIDTH, MAP_HEIGHT)
+screen = Screen(width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
+camera = Camera(CAMERA_WIDTH, CAMERA_HEIGHT, dungeon_map) 
+renderer = Renderer(console, screen, camera)
+
  
 while not libtcod.console_is_window_closed():
-    render_all(camera, player)
+    renderer.render(player, dungeon_objects, dungeon_map)
     libtcod.console_flush()
- 
-    for obj in objects:
-        obj.clear(con, camera)
- 
+    renderer.clear(dungeon_objects) 
     exit = handle_keys()
     if exit:
         break
