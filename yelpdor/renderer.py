@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-import libtcodpy as libtcod
+import lib.libtcodpy as libtcod
 
 
 color_dark_wall = libtcod.Color(0,0,100)
