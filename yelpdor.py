@@ -1,15 +1,15 @@
 from lib import libtcodpy as libtcod
 
+from yelpdor.camera import Camera
+from yelpdor.city_map_generator import generate_city_map
 from yelpdor.game_obj import GameObj
-from yelpdor.simple_dungeon import make_map
 from yelpdor.renderer import Renderer
 from yelpdor.renderer import Screen 
-from yelpdor.camera import Camera
-
+from yelpdor.simple_dungeon import make_map
 
 #size of the map
-MAP_HEIGHT = 128
-MAP_WIDTH = 128 
+MAP_HEIGHT = 256
+MAP_WIDTH = 256 
  
 #actual size of the window
 SCREEN_HEIGHT = 64 
@@ -56,13 +56,15 @@ libtcod.sys_set_fps(LIMIT_FPS)
 console = libtcod.console_new(SCREEN_WIDTH, SCREEN_HEIGHT)
  
 player = GameObj(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, '@', libtcod.white)
+ 
 dungeon_objects = [player]
 
-dungeon_map = make_map(player, MAP_WIDTH, MAP_HEIGHT)
+dungeon_map = generate_city_map(MAP_WIDTH, MAP_HEIGHT)
+player.x, player.y = dungeon_map.spawn
+dungeon_map.init_fov_map()
 screen = Screen(width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
 camera = Camera(CAMERA_WIDTH, CAMERA_HEIGHT, dungeon_map) 
 renderer = Renderer(console, screen, camera)
-
  
 while not libtcod.console_is_window_closed():
     renderer.render(player, dungeon_objects, dungeon_map)
