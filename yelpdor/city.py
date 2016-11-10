@@ -1,8 +1,11 @@
 import numpy.random
 from collections import defaultdict
 
+BIZ_COUNT = 10
+BIZ_TRUE_RATING_DISTRIBUTION = [0.2, 0.2, 0.2, 0.2, 0.2]
+
 FACET_SD = 1.5
-FACET_REVIEW_SD = 2.
+FACET_REVIEW_SD = 1.5
 REVIEW_COUNT_SD = 5
 
 REVIEW_COUNT_MEAN = 3
@@ -16,7 +19,7 @@ class District:
         Probability of businesses having true score means with the values [1, 2, 3, 4, 5], respectively.
     """
 
-    def __init__(self, count=10, distribution=[0.2, 0.2, 0.2, 0.2, 0.2], review_count_mean=REVIEW_COUNT_MEAN):
+    def __init__(self, count=BIZ_COUNT, distribution=BIZ_TRUE_RATING_DISTRIBUTION, review_count_mean=REVIEW_COUNT_MEAN):
         self.businesses = []
         for mean in numpy.random.choice(range(1, 6), p=distribution, size=count):
             self.businesses.append(Restaurant(mean, review_count_mean))
@@ -31,19 +34,6 @@ class District:
 class Business:
     """A Business with its true scores, category, reviews, etc.
     """
-
-    ordered_facets = []
-
-    def __init__(self, mean, review_count_mean):
-        self.name = ''
-        self.true_rating = 0
-        self.facet_ratings = {}
-        self.review_count = 0
-        self.reviews = []
-        self.aggregated_facet_ratings = {}
-        self.rounded_aggregated_facet_ratings
-        self.aggregated_overall_rating = 0
-        self.rounded_aggregated_overall_rating = 0
 
     def generate_name(self):
         return 'Nyarlathotep\'s Bagel Shop'
@@ -79,12 +69,19 @@ class Business:
     def aggregate_overall_reviews(self):
         return sum([rating for facet, rating in self.aggregated_facet_ratings.items()])/float(len(self.ordered_facets))
 
-    def sample_facet_review(self, true_facet_rating):
+    def sample_facet_review(self, facet_rating):
         rating = -1
         while not rating in range(1, 6):
-            rating = round(numpy.random.normal(loc=self.true_rating, scale=FACET_REVIEW_SD))
+            rating = round(numpy.random.normal(loc=facet_rating, scale=FACET_REVIEW_SD))
         return int(rating)
 
+    def get_review_similarity(self, player_facet_ratings):
+        """In range [0, 1], with 0 for all reviews differing from the true ratings by more than half of
+        the maximum possible difference"""
+        raw_difference = (((self.max_player_review_difference / 2.) -
+                sum([abs(player_facet_ratings[facet] - self.facet_ratings[facet]) for facet in self.ordered_facets])) /
+                self.max_player_review_difference)
+        return raw_difference if raw_difference >= 0 else 0
 
 
 class Restaurant(Business):
@@ -103,17 +100,22 @@ class Restaurant(Business):
         self.review_count = self.determine_review_count(review_count_mean)
         self.reviews = self.generate_reviews()
         self.aggregated_facet_ratings = self.aggregate_facet_reviews()
-        self.rounded_aggregated_facet_ratings = {facet: int(round(rating)) for facet, rating in self.aggregated_facet_ratings.items()}
+        self.rounded_aggregated_facet_ratings = {facet: int(round(rating))
+                                                 for facet, rating in self.aggregated_facet_ratings.items()}
         self.aggregated_overall_rating = self.aggregate_overall_reviews()
         self.rounded_aggregated_overall_rating = int(round(self.aggregated_overall_rating))
+        self.max_player_review_difference = 4.0 * len(self.ordered_facets)
 
     def __repr__(self):
         return '\n'.join([
             'Name: {}'.format(self.name),
             'True rating: {}'.format(format_rating(self.true_rating)),
-            '\n'.join(['> True {}: {}'.format(facet, format_rating(self.facet_ratings[facet])) for facet in self.ordered_facets]),
-            'Review aggregate: {} overall ({} reviews)'.format(self.rounded_aggregated_overall_rating, self.review_count),
-            '\n'.join(['> {}: {}'.format(facet, format_rating(self.rounded_aggregated_facet_ratings[facet])) for facet in self.ordered_facets]),
+            '\n'.join(['> True {}: {}'.format(
+                facet, format_rating(self.facet_ratings[facet])) for facet in self.ordered_facets]),
+            'Review aggregate: {} overall (based on {} reviews)'.format(
+                format_rating(self.rounded_aggregated_overall_rating), self.review_count),
+            '\n'.join(['> {}: {}'.format(
+                facet, format_rating(self.rounded_aggregated_facet_ratings[facet])) for facet in self.ordered_facets]),
             'Reviews:',
             '\n'.join(['> Review {}\n{}'.format(i+1, review) for i, review in enumerate(self.reviews)])
             ])

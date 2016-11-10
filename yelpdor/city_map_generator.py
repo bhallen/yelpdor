@@ -5,8 +5,8 @@ from tile import create_tile
 from tile import Rect
 from dungeon_map import DungeonMap
 
-MIN_BLOCK_SIZE = 13
-MAX_BLOCK_SIZE = 21
+MIN_BLOCK_SIZE = 25
+MAX_BLOCK_SIZE = 50
 
 def generate_city_map(width, height):
     # generates a grid-based city map
