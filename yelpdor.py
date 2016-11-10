@@ -1,11 +1,11 @@
 from lib import libtcodpy as libtcod
 
+from yelpdor.amulet import Amulet
 from yelpdor.camera import Camera
 from yelpdor.city_map_generator import generate_city_map
 from yelpdor.game_obj import GameObj
 from yelpdor.renderer import Renderer
 from yelpdor.renderer import Screen 
-from yelpdor.simple_dungeon import make_map
 
 #size of the map
 MAP_HEIGHT = 256
@@ -20,7 +20,6 @@ CAMERA_WIDTH = 48
  
 LIMIT_FPS = 20  #20 frames-per-second maximum
  
- 
 def handle_keys():
     #key = libtcod.console_check_for_keypress()  #real-time
     key = libtcod.console_wait_for_keypress(True)  #turn-based
@@ -31,6 +30,9 @@ def handle_keys():
  
     elif key.vk == libtcod.KEY_ESCAPE:
         return True  #exit game
+
+    elif key.c == ord('y') or key.c == ord('Y'):
+        amulet.toggle_visibility()
  
     #movement keys
     if libtcod.console_is_key_pressed(libtcod.KEY_UP):
@@ -65,9 +67,10 @@ dungeon_map.init_fov_map()
 screen = Screen(width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
 camera = Camera(CAMERA_WIDTH, CAMERA_HEIGHT, dungeon_map) 
 renderer = Renderer(console, screen, camera)
+amulet = Amulet(3, 3)
  
 while not libtcod.console_is_window_closed():
-    renderer.render(player, dungeon_objects, dungeon_map)
+    renderer.render(player, dungeon_objects, dungeon_map, amulet)
     libtcod.console_flush()
     exit = handle_keys()
     if exit:
