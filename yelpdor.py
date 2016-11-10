@@ -83,7 +83,7 @@ npc = GameObj(SCREEN_WIDTH/2 - 5, SCREEN_HEIGHT/2, '@', libtcod.yellow)
 objects = [npc, player]
  
 #generate map (at this point it's not drawn to the screen)
-dmap = make_map(MAP_HEIGHT, MAP_WIDTH)
+dmap = make_map(player, MAP_HEIGHT, MAP_WIDTH)
  
  
 while not libtcod.console_is_window_closed():
