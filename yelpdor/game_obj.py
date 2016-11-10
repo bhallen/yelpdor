@@ -1,4 +1,5 @@
-import libtcodpy as libtcod
+from lib import libtcodpy as libtcod
+
 
 class GameObj:
     #this is a generic object: the player, a monster, an item, the stairs...

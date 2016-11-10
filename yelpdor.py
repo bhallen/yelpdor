@@ -1,6 +1,5 @@
-import libtcodpy as libtcod
+from lib import libtcodpy as libtcod
 
-from yelpdor.tile import Tile
 from yelpdor.game_obj import GameObj
 from yelpdor.simple_dungeon import make_map
 from yelpdor.renderer import Camera

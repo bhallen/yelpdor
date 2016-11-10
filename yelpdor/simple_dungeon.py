@@ -1,7 +1,5 @@
-import libtcodpy as libtcod
-
 from dungeon_map import DungeonMap
-from tile import Tile
+from lib import libtcodpy as libtcod
 from tile import Rect
 
 
