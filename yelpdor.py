@@ -40,12 +40,9 @@ def render_all(camera, player):
 
             for obj in objects:
                 if obj != player:
-                    obj.draw(con)
-            player.draw(con)
+                    obj.draw(con, camera)
+            player.draw(con, camera)
 
- 
-
-    #blit the contents of "con" to the root console
     libtcod.console_blit(con, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0)
  
 def handle_keys():
@@ -82,32 +79,21 @@ libtcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT, 'python/libtcod tutorial'
 libtcod.sys_set_fps(LIMIT_FPS)
 con = libtcod.console_new(SCREEN_WIDTH, SCREEN_HEIGHT)
  
-#create object representing the player
 player = GameObj(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, '@', libtcod.white)
  
-#create an NPC
-npc = GameObj(SCREEN_WIDTH/2 - 5, SCREEN_HEIGHT/2, '@', libtcod.yellow)
+objects = [player]
  
-#the list of objects with those two
-objects = [npc, player]
- 
-#generate map (at this point it's not drawn to the screen)
 dmap = make_map(player, MAP_WIDTH, MAP_HEIGHT)
 
 camera = Camera(CAMERA_WIDTH, CAMERA_HEIGHT, dmap) 
  
 while not libtcod.console_is_window_closed():
- 
-    #render the screen
     render_all(camera, player)
- 
     libtcod.console_flush()
  
-    #erase all objects at their old locations, before they move
     for obj in objects:
-        obj.clear(con)
+        obj.clear(con, camera)
  
-    #handle keys and exit game if needed
     exit = handle_keys()
     if exit:
         break
