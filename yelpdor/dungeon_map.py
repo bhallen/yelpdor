@@ -8,31 +8,50 @@ ROOM_MAX_SIZE = 10
 ROOM_MIN_SIZE = 6
 MAX_ROOMS = 30
 
+
+class DungeonMap:
+    MAP_WIDTH=128
+    MAP_HEIGHT=128
+    __dmap__ = [] 
+
+    def __init__(self, width, height):
+        self.MAP_WIDTH = width
+        self.MAP_HEIGHT = height
+
+        self.__dmap__ = [ [Tile(True) for y in range(height) ] for x in range(width) ]
+ 
+
+    def __getitem__(self, key):
+        return self.__dmap__[key]
+
 def create_room(dmap, room):
     #go through the tiles in the rectangle and make them passable
     for x in range(room.x1 + 1, room.x2):
         for y in range(room.y1 + 1, room.y2):
             dmap[x][y].blocked = False
             dmap[x][y].block_sight = False
+
  
 def create_h_tunnel(dmap, x1, x2, y):
     #horizontal tunnel. min() and max() are used in case x1>x2
     for x in range(min(x1, x2), max(x1, x2) + 1):
         dmap[x][y].blocked = False
         dmap[x][y].block_sight = False
+
  
 def create_v_tunnel(dmap, y1, y2, x):
     #vertical tunnel
     for y in range(min(y1, y2), max(y1, y2) + 1):
         dmap[x][y].blocked = False
         dmap[x][y].block_sight = False
+
+
+
  
 def make_map(player, height, width):
     #fill map with "blocked" tiles
-    dmap = [[ Tile(True)
-        for y in range(height) ]
-            for x in range(width) ]
- 
+    dmap = DungeonMap(width, height)
+
     rooms = []
     num_rooms = 0
  
