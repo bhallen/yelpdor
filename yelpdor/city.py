@@ -1,6 +1,9 @@
 import numpy.random
 from collections import defaultdict
 
+BIZ_COUNT = 10
+BIZ_TRUE_RATING_DISTRIBUTION = [0.2, 0.2, 0.2, 0.2, 0.2]
+
 FACET_SD = 1.5
 FACET_REVIEW_SD = 2.
 REVIEW_COUNT_SD = 5
@@ -16,7 +19,7 @@ class District:
         Probability of businesses having true score means with the values [1, 2, 3, 4, 5], respectively.
     """
 
-    def __init__(self, count=10, distribution=[0.2, 0.2, 0.2, 0.2, 0.2], review_count_mean=REVIEW_COUNT_MEAN):
+    def __init__(self, count=BIZ_COUNT, distribution=BIZ_TRUE_RATING_DISTRIBUTION, review_count_mean=REVIEW_COUNT_MEAN):
         self.businesses = []
         for mean in numpy.random.choice(range(1, 6), p=distribution, size=count):
             self.businesses.append(Restaurant(mean, review_count_mean))
