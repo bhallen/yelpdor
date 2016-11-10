@@ -2,35 +2,21 @@ import libtcodpy as libtcod
 
 from yelpdor.tile import Tile
 from yelpdor.game_obj import GameObj
+from yelpdor.dungeon_map import make_map
+
+#size of the map
+MAP_WIDTH = 80
+MAP_HEIGHT = 45
  
 #actual size of the window
 SCREEN_WIDTH = 80
 SCREEN_HEIGHT = 50
- 
-#size of the map
-MAP_WIDTH = 80
-MAP_HEIGHT = 45
  
 LIMIT_FPS = 20  #20 frames-per-second maximum
  
  
 color_dark_wall = libtcod.Color(0, 0, 100)
 color_dark_ground = libtcod.Color(50, 50, 150)
- 
- 
-def make_map():
-    global dmap
- 
-    #fill map with "unblocked" tiles
-    dmap = [[ Tile(False)
-        for y in range(MAP_HEIGHT) ]
-            for x in range(MAP_WIDTH) ]
- 
-    #place two pillars to test the map
-    dmap[30][22].blocked = True
-    dmap[30][22].block_sight = True
-    dmap[50][22].blocked = True
-    dmap[50][22].block_sight = True
  
  
 def render_all():
@@ -97,7 +83,7 @@ npc = GameObj(SCREEN_WIDTH/2 - 5, SCREEN_HEIGHT/2, '@', libtcod.yellow)
 objects = [npc, player]
  
 #generate map (at this point it's not drawn to the screen)
-make_map()
+dmap = make_map(MAP_HEIGHT, MAP_WIDTH)
  
  
 while not libtcod.console_is_window_closed():
