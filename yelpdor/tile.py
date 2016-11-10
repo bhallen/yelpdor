@@ -16,12 +16,42 @@ class Rect:
         return (self.x1 <= other.x2 and self.x2 >= other.x1 and
                 self.y1 <= other.y2 and self.y2 >= other.y1)
 
+    @property
+    def w(self):
+        return self.x2 - self.x1
+    
+    @property
+    def h(self):
+        return self.y2 - self.y1
+
+
+class TileType:
+    floor = 1
+    wall = 2
+    street = 3
+    sidewalk = 4
+    door = 5
+    
 
 class Tile:
     #a tile of the map and its properties
-    def __init__(self, blocked, block_sight = None):
+    def __init__(self, blocked, block_sight = None, tile_type=TileType.floor):
         self.blocked = blocked
 
         #by default, if a tile is blocked, it also blocks sight
         if block_sight is None: block_sight = blocked
         self.block_sight = block_sight
+
+        self.tile_type = tile_type
+
+# creates a tile based on the type
+def create_tile(tile_type):
+    blocked = False
+    block_sight = None
+
+    if tile_type == TileType.wall:
+        blocked = True
+    elif tile_type == TileType.door:
+        block_sight = True
+
+    return Tile(blocked, block_sight, tile_type)

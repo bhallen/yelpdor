@@ -1,4 +1,4 @@
-import libtcodpy as libtcod
+import random
 
 from tile import Tile
 from tile import Rect
@@ -14,6 +14,7 @@ class DungeonMap:
     MAP_HEIGHT=128
     __map__ = [] 
     rooms = []
+    spawn = (0, 0)
 
     def __init__(self, width, height):
         self.MAP_WIDTH = width
@@ -24,6 +25,9 @@ class DungeonMap:
 
     def __getitem__(self, key):
         return self.__map__[key]
+
+    def within_map(self, x, y):
+        return 0 <= x and x < self.MAP_WIDTH and 0 <= y and y < self.MAP_HEIGHT
 
 
 
@@ -62,11 +66,11 @@ def make_map(player, height, width):
  
     for r in range(MAX_ROOMS):
         #random width and height
-        w = libtcod.random_get_int(0, ROOM_MIN_SIZE, ROOM_MAX_SIZE)
-        h = libtcod.random_get_int(0, ROOM_MIN_SIZE, ROOM_MAX_SIZE)
+        w = random.randint(ROOM_MIN_SIZE, ROOM_MAX_SIZE)
+        h = random.randint(ROOM_MIN_SIZE, ROOM_MAX_SIZE)
         #random position without going out of the boundaries of the map
-        x = libtcod.random_get_int(0, 0, width - w - 1)
-        y = libtcod.random_get_int(0, 0, height - h - 1)
+        x = random.randint(0, width - w - 1)
+        y = random.randint(0, height - h - 1)
  
         #"Rect" class makes rectangles easier to work with
         new_room = Rect(x, y, w, h)
@@ -99,7 +103,7 @@ def make_map(player, height, width):
                 (prev_x, prev_y) = dmap.rooms[num_rooms-1].center()
  
                 #draw a coin (random number that is either 0 or 1)
-                if libtcod.random_get_int(0, 0, 1) == 1:
+                if random.randint(0, 1) == 1:
                     #first move horizontally, then vertically
                     create_h_tunnel(dmap, prev_x, new_x, prev_y)
                     create_v_tunnel(dmap, prev_y, new_y, new_x)

@@ -2,7 +2,7 @@ import libtcodpy as libtcod
 
 from yelpdor.tile import Tile
 from yelpdor.game_obj import GameObj
-from yelpdor.dungeon_map import make_map
+from yelpdor.city_map_generator import generate_city_map
 
 #size of the map
 MAP_WIDTH = 80
@@ -83,7 +83,8 @@ npc = GameObj(SCREEN_WIDTH/2 - 5, SCREEN_HEIGHT/2, '@', libtcod.yellow)
 objects = [npc, player]
  
 #generate map (at this point it's not drawn to the screen)
-dmap = make_map(player, MAP_HEIGHT, MAP_WIDTH)
+dmap = generate_city_map(MAP_WIDTH, MAP_HEIGHT)
+player.x, player.y = dmap.spawn
  
  
 while not libtcod.console_is_window_closed():
