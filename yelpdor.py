@@ -46,9 +46,13 @@ def handle_keys():
 
     elif amulet.visible and amulet.is_blocking():
         if key.vk < libtcod.KEY_0 or key.vk > libtcod.KEY_KP9:
+            # This is for the ReviewExperienceMenu only
+            Messenger().message('You need to enter a score before continuing!')
             return
         else:
-            amulet.keyboard_input(key.vk)
+            success = amulet.keyboard_input(key.vk)
+            if not success:
+                return
     else:
 
         # movement keys
