@@ -2,6 +2,7 @@ from abc import ABCMeta
 from abc import abstractmethod
 
 from lib import libtcodpy as libtcod
+from lib.libtcodpy import console_print
 
 
 def draw_menu(func):
@@ -25,6 +26,7 @@ class AmuletMenu(object):
     def __init__(self, panel):
         self.name = 'Name'
         self.panel = panel
+        self.blocking = False
 
     @abstractmethod
     def show(self):
@@ -33,3 +35,8 @@ class AmuletMenu(object):
     @abstractmethod
     def select_option(self, num):
         pass
+
+    def make_msg_print_func(self, x_offset=0, y_offset=0):
+        def func(line_num, msg):
+            console_print(self.panel, x_offset, y_offset + line_num, msg)
+        return func

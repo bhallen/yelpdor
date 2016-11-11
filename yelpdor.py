@@ -44,24 +44,33 @@ def handle_keys():
     #     # Show/hide amulet
     #     amulet.toggle()
 
-    elif (amulet.visible
-          and key.vk >= libtcod.KEY_0
-          and key.vk <= libtcod.KEY_KP9):
-        # If amulet is displayed, redirect numeric input to amulet
-        amulet.keyboard_input(key.vk)
+    elif amulet.visible and amulet.is_blocking():
+        if key.vk < libtcod.KEY_0 or key.vk > libtcod.KEY_KP9:
+            return
+        else:
+            amulet.keyboard_input(key.vk)
+    else:
 
-    # movement keys
-    if libtcod.console_is_key_pressed(libtcod.KEY_UP) and player.char != 'X':
-        player.move(dungeon_map, 0, -1)
+        # movement keys
+        if libtcod.console_is_key_pressed(libtcod.KEY_UP) and player.char != 'X':
+            player.move(dungeon_map, 0, -1)
 
-    elif libtcod.console_is_key_pressed(libtcod.KEY_DOWN) and player.char != 'X':
-        player.move(dungeon_map, 0, 1)
+        elif libtcod.console_is_key_pressed(libtcod.KEY_DOWN) and player.char != 'X':
+            player.move(dungeon_map, 0, 1)
 
-    elif libtcod.console_is_key_pressed(libtcod.KEY_LEFT) and player.char != 'X':
-        player.move(dungeon_map, -1, 0)
+        elif libtcod.console_is_key_pressed(libtcod.KEY_LEFT) and player.char != 'X':
+            player.move(dungeon_map, -1, 0)
 
-    elif libtcod.console_is_key_pressed(libtcod.KEY_RIGHT) and player.char != 'X':
-        player.move(dungeon_map, 1, 0)
+        elif libtcod.console_is_key_pressed(libtcod.KEY_RIGHT) and player.char != 'X':
+            player.move(dungeon_map, 1, 0)
+
+        # TEMPORARY: press r to review a business
+        elif key.c == ord('r'):
+            biz = random.choice(district.businesses)
+            biz.visit(player)
+        elif key.vk >= libtcod.KEY_0 and key.vk <= libtcod.KEY_KP9:
+            # If amulet is displayed, redirect numeric input to amulet
+            amulet.keyboard_input(key.vk)
 
 
 #############################################
@@ -91,6 +100,7 @@ player = Player(dungeon_map.spawn[0], dungeon_map.spawn[1], '@', libtcod.white)
 dungeon_map.objects.append(player)
 stats = Stats(48, 3, player)
 amulet = Amulet(player, 48, 12, district)
+player.amulet = amulet
 
 player.set_level(dungeon_map, district)
 

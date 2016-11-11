@@ -27,6 +27,7 @@ class Player(GameObj):  # pylint: disable=too-many-instance-attributes
 
         self.dungeon_map = None
         self.district = None
+        self.amulet = None
 
     def set_level(self, dungeon_map, district):
         self.dungeon_map = dungeon_map
@@ -95,7 +96,7 @@ class Player(GameObj):  # pylint: disable=too-many-instance-attributes
     def receive_payment(self):
         payment = int(round(math.log(self.review_count) * self.reputation))
         payment += random.randint(-1, 2)
-        if payment > 0: 
+        if payment > 0:
             events = load_eventset('fanstory')
             self.dollars += payment
             Messenger().message('You received {} dollar{} from your fans.'.format(
