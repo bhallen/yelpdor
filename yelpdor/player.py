@@ -24,6 +24,8 @@ class Player(GameObj):  # pylint: disable=too-many-instance-attributes
         self.ticks_between_payments = 20
         self.ticks_between_hunger_ticks = 2
         self.current_business = ''
+        self.side_effect_timer = 0
+        self.side_effect_damage = 0
 
         self.dungeon_map = None
         self.district = None
@@ -70,6 +72,7 @@ class Player(GameObj):  # pylint: disable=too-many-instance-attributes
                 Messenger().message('You are literally starving to death. Quite literally.')
                 Messenger().message('')
             self.health -= 1
+            # self.tick_side_effect()
         else:
             self.hunger += 1
             if self.hunger < 50:
@@ -81,6 +84,7 @@ class Player(GameObj):  # pylint: disable=too-many-instance-attributes
             elif self.hunger >= 80 and self.hunger % 3 == 0:
                 Messenger().message('You are very hungry.')
                 Messenger().message('')
+            self.tick_side_effect()
 
     def update_reviewing_stats(self, player_review, business):
         self.review_count += 1
@@ -110,3 +114,11 @@ class Player(GameObj):  # pylint: disable=too-many-instance-attributes
                     random.choice(events)),
                 )
             Messenger().message('')
+
+    def tick_side_effect(self):
+        if self.side_effect_timer > 0:
+            self.side_effect_timer -= 1
+        if self.side_effect_timer == 1:
+            self.health = max(0, self.health - self.side_effect_damage)
+            Messenger().message('You\'re hit by sudden gastrointestinal distress! Must\'ve been something you ate...')
+

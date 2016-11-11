@@ -15,7 +15,7 @@ from yelpdor.menu.review_experience import ReviewExperienceMenu
 from yelpdor.npc import NPC
 
 BIZ_COUNT = 10
-BIZ_TRUE_RATING_DISTRIBUTION = [0.2, 0.2, 0.2, 0.2, 0.2]
+BIZ_TRUE_RATING_DISTRIBUTION = [0.25, 0.2, 0.1, 0.2, 0.25]
 
 
 FACET_SD = 1.5
