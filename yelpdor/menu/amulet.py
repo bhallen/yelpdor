@@ -3,7 +3,7 @@ from collections import namedtuple
 from lib import libtcodpy as libtcod
 from yelpdor.menu.main_menu import MainMenu
 
-PANEL_WIDTH = 30
+PANEL_WIDTH = 31
 PANEL_HEIGHT = 15
 
 MenuOption = namedtuple('MenuOption', ['name', 'function'])

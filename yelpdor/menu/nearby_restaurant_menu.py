@@ -18,18 +18,24 @@ class NearbyRestaurantMenu(AmuletMenu):
 
     @draw_menu
     def show(self):
-        self.sorted_restaurants = self.district.sorted_by_distance(self.player)
+        self.sorted_restaurants = self.district.sorted_by_distance(self.player)[:6]
         self.restaurant_menus = [RestaurantMenu(self.panel, r) for r in self.sorted_restaurants]
         line_num = 0
         console_print(self.panel, 0, line_num,
-                      'The following restaurants are nearby:')
+                      'Restaurants (nearest first):')
 
         for num, restaurant in enumerate(self.restaurant_menus, start=0):
-            line_num += 1
-            msg = '{}. {} {}'.format(num, restaurant.name, format_rating(restaurant.rounded_aggregated_overall_rating))
+            line_num += 2
+            msg = '{}. {} ({})'.format(num,
+                                                       restaurant.business.name[:12] + '...' if len(
+                                                           restaurant.business.name) > 14 else restaurant.business.name.ljust(15),
+                                                       self.get_biz_direction(restaurant, self.player))
             console_print(self.panel, 0, line_num, msg)
+            msg = '     {}, {} reviews'.format(format_rating(restaurant.business.rounded_aggregated_overall_rating),
+                                               restaurant.business.review_count)
+            console_print(self.panel, 0, line_num + 1, msg)
 
-        line_num += 1
+        line_num += 2
         exit_msg = '{}. {}'.format(len(self.restaurant_menus), 'Exit')
         console_print(self.panel, 0, line_num, exit_msg)
 
@@ -38,3 +44,19 @@ class NearbyRestaurantMenu(AmuletMenu):
             # Ignore invalid menu options
             return
         return self.restaurant_menus[num]
+
+    def get_biz_direction(self, biz, player):
+        biz_x, biz_y = biz.business.room.rect.center()
+        if biz_y > player.y:
+            latdir = 'N'
+        elif biz_y < player.y:
+            latdir = 'S'
+        else:
+            latdir = ''
+        if biz_x > player.x:
+            longdir = 'E'
+        elif biz_x < player.x:
+            longdir = 'W'
+        else:
+            longdir = ''
+        return latdir + longdir

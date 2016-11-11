@@ -131,6 +131,7 @@ class Business:
         else:
             e = Experience(self)
             e.describe()
+            Messenger().message(' ')
             player.hunger = max(0, player.hunger - self.facet_ratings['Food/Drinks'] * self.fulfillment_multiplier)
             player.dollars -= self.cost
 
