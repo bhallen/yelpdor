@@ -35,6 +35,7 @@ class TileType:
     wall = 2
     street = 3
     door = 4
+    rock = 5
     
 
 class Tile:
@@ -58,5 +59,8 @@ def create_tile(tile_type):
         blocked = True
     elif tile_type == TileType.door:
         block_sight = True
+    elif tile_type == TileType.rock:
+        blocked = True
+        block_sight = False
 
     return Tile(blocked, block_sight, tile_type)

@@ -19,6 +19,7 @@ TILE_DISPS = {
     TileType.wall: TileDisp(' ', libtcod.Color(130, 110, 50), None),
     TileType.street: TileDisp(' ', libtcod.Color(105, 105, 105), None),
     TileType.door: TileDisp('+', libtcod.Color(139, 69, 19), libtcod.Color(255, 255, 255)),
+    TileType.rock: TileDisp('O', libtcod.Color(105, 105, 105), libtcod.Color(0, 0, 0)),
 }
 
 
