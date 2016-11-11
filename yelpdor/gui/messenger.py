@@ -35,6 +35,8 @@ class InnerMessenger:
 
     def message(self, msg, color):
         msg_lines = textwrap.wrap(msg, self.width - 2 * self.MSG_X_PADDING)
+        if not msg_lines:
+            msg_lines = ['']
      
         for line in msg_lines:
             if len(self.queue) == self.height - 2 * self.MSG_Y_PADDING:

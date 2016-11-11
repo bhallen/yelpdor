@@ -1,3 +1,5 @@
+import random
+
 from lib import libtcodpy as libtcod
 from yelpdor.camera import Camera
 from yelpdor.city import District
@@ -58,6 +60,11 @@ def handle_keys():
 
     elif libtcod.console_is_key_pressed(libtcod.KEY_RIGHT):
         player.move(dungeon_map, 1, 0)
+
+    # TEMPORARY: press r to review a business
+    elif key.c == ord('r'):
+        biz = random.choice(district.businesses)
+        biz.visit(player)
 
     # check position for events
     player_business = district.find_business_containing_player(player)
