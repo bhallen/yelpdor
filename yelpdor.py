@@ -83,3 +83,7 @@ messenger = Messenger(
 
 while not libtcod.console_is_window_closed():
     renderer.render(player, dungeon_objects, dungeon_map, amulet)
+    messenger.render()
+    libtcod.console_flush()
+    if handle_keys():
+        break
