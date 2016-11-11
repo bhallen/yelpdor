@@ -1,17 +1,18 @@
-from collections import defaultdict
 import math
+import os
+import random
+from collections import defaultdict
+
 import numpy as np
 import numpy.linalg
 import numpy.random
-import os
-import random
+import utils
 
 import lib.libtcodpy as libtcod
-
 from yelpdor.experience import Experience
 from yelpdor.gui.messenger import Messenger
+from yelpdor.menu.review_experience import ReviewExperienceMenu
 from yelpdor.npc import NPC
-import utils
 
 BIZ_COUNT = 10
 BIZ_TRUE_RATING_DISTRIBUTION = [0.2, 0.2, 0.2, 0.2, 0.2]
@@ -23,7 +24,9 @@ REVIEW_COUNT_SD = 5
 REVIEW_COUNT_MEAN = 3
 RESTAURANT_COST = 5
 
-REGION_NAME_CFG_PATH = os.path.dirname(os.path.realpath(__file__)) + '/../res/textgen/jice_region.cfg'
+REGION_NAME_CFG_PATH = os.path.dirname(os.path.realpath(
+    __file__)) + '/../res/textgen/jice_region.cfg'
+
 
 class District:
     """A level or floor of the city containing Businesses.
@@ -77,6 +80,7 @@ class District:
 class Business:
     """A Business with its true scores, category, reviews, etc.
     """
+
     def __init__(self):
         self.fulfillment_multiplier = 1
 
@@ -106,10 +110,10 @@ class Business:
             for review in self.reviews:
                 for facet in self.ordered_facets:
                     facet_to_reviews[facet].append(review.ratings[facet])
-            return {facet: sum(facet_to_reviews[facet])/float(self.review_count) for facet in self.ordered_facets}
+            return {facet: sum(facet_to_reviews[facet]) / float(self.review_count) for facet in self.ordered_facets}
 
     def aggregate_overall_reviews(self):
-        return sum([rating for facet, rating in self.aggregated_facet_ratings.items()])/float(len(self.ordered_facets))
+        return sum([rating for facet, rating in self.aggregated_facet_ratings.items()]) / float(len(self.ordered_facets))
 
     def sample_facet_review(self, facet_rating):
         rating = -1
@@ -121,8 +125,8 @@ class Business:
         """In range [0, 1], with 0 for all reviews differing from the true ratings by more than half of
         the maximum possible difference"""
         raw_difference = (((self.max_player_review_difference / 2.) -
-                sum([abs(player_review.ratings[facet] - self.facet_ratings[facet]) for facet in self.ordered_facets])) /
-                self.max_player_review_difference)
+                           sum([abs(player_review.ratings[facet] - self.facet_ratings[facet]) for facet in self.ordered_facets])) /
+                          self.max_player_review_difference)
         return raw_difference if raw_difference >= 0 else 0
 
     def visit(self, player):
@@ -137,12 +141,16 @@ class Business:
             player.hunger = max(0, player.hunger - self.facet_ratings['Food/Drinks'] * self.fulfillment_multiplier)
             player.dollars -= self.cost
 
-    def leave_review(self, player):
+    def leave_review(self, player, amulet):
         self.visited = True
-        fake_player_review = self.generate_review()
+
+        review_menu = ReviewExperienceMenu(self.panel, self.name)
+        amulet.push_menu(review_menu)
+        review = Review([(facet, score) for facet, score in review_menu.reviewed])
+
         Messenger().message('You leave a review of {}...'.format(self.name))
         Messenger().message(' ')
-        player.update_reviewing_stats(fake_player_review, self)
+        player.update_reviewing_stats(review, self)
 
 
 class Restaurant(Business):
@@ -156,7 +164,7 @@ class Restaurant(Business):
     bizname_data: dict from biznames.json
     """
 
-    ordered_facets = ['Food/Drinks', 'Service', 'Cleanliness'] # ordered for display
+    ordered_facets = ['Food/Drinks', 'Service', 'Cleanliness']  # ordered for display
 
     def __init__(self, mean, review_count_mean, cost, room, bizname_data, fulfillment_multiplier=4):
         libtcod.namegen_parse(REGION_NAME_CFG_PATH)
@@ -178,7 +186,7 @@ class Restaurant(Business):
         self.max_player_review_difference = 4.0 * len(self.ordered_facets)
         self.cost = cost
         self.room = room
-        self.attributes = [] # not yet implemented
+        self.attributes = []  # not yet implemented
 
     def __repr__(self):
         return '\n'.join([
@@ -192,7 +200,7 @@ class Restaurant(Business):
                 facet, format_rating(self.rounded_aggregated_facet_ratings[facet])) for facet in self.ordered_facets]),
             'Check business.reviews to see individual reviews.'
             # '\n'.join(['> Review {}\n{}'.format(i+1, review) for i, review in enumerate(self.reviews)])
-            ])
+        ])
 
     def generate_name(self):
         recipe = random.choice(self.bizname_data['recipes'])
@@ -213,11 +221,11 @@ class Review:
 
 def format_rating(rating):
     if rating > 0:
-        return '[{}{}]'.format('*'*rating, ' '*(5-rating))
+        return '[{}{}]'.format('*' * rating, ' ' * (5 - rating))
     else:
         return '[  ?  ]'
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     d = District()
     print(d)
