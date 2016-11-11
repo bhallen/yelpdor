@@ -4,8 +4,8 @@ import random
 import lib.libtcodpy as libtcod
 from game_obj import GameObj
 
-HUMAN_NAME_CFG_PATH = os.path.dirname(os.path.realpath(__file__)) + '/../res/namegen/jice_mesopotamian.cfg'
-DWARF_NAME_CFG_PATH = os.path.dirname(os.path.realpath(__file__)) + '/../res/namegen/mingos_dwarf.cfg'
+HUMAN_NAME_CFG_PATH = os.path.dirname(os.path.realpath(__file__)) + '/../res/textgen/jice_mesopotamian.cfg'
+DWARF_NAME_CFG_PATH = os.path.dirname(os.path.realpath(__file__)) + '/../res/textgen/mingos_dwarf.cfg'
 
 class NPC(GameObj):
 

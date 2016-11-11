@@ -11,8 +11,6 @@ import lib.libtcodpy as libtcod
 from yelpdor.experience import Experience
 from yelpdor.gui.messenger import Messenger
 from yelpdor.npc import NPC
-from yelpdor.tile import create_tile
-from yelpdor.tile import TileType
 import utils
 
 BIZ_COUNT = 10
@@ -25,7 +23,7 @@ REVIEW_COUNT_SD = 5
 REVIEW_COUNT_MEAN = 3
 RESTAURANT_COST = 5
 
-REGION_NAME_CFG_PATH = os.path.dirname(os.path.realpath(__file__)) + '/../res/namegen/jice_region.cfg'
+REGION_NAME_CFG_PATH = os.path.dirname(os.path.realpath(__file__)) + '/../res/textgen/jice_region.cfg'
 
 class District:
     """A level or floor of the city containing Businesses.
