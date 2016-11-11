@@ -28,9 +28,11 @@
     "Surf and Turf",
     "Sushi",
     "Taco",
-    "Taco",
     "TexMex",
-    "Worg Tongue"
+    "Slop",
+    "Pancake",
+    "Stew",
+    "Soup"
   ],
   "restaurant_type": [
     "Bar",
@@ -42,7 +44,8 @@
     "Parlor",
     "Pub",
     "Shack",
-    "Shop"
+    "Shop",
+    "House"
   ],
   "food_suffix": [
     "Duke",
@@ -109,6 +112,7 @@
     "Warbler",
     "Whale",
     "Xerus",
+    "Warg",
     "Yak",
     "Zebra"
   ]
