@@ -68,6 +68,9 @@ class Renderer:
         camera = self.camera
         con = self.map_console
 
+        # Clear screen before redraw
+        libtcod.console_clear(con)
+
         camera.move(player.x, player.y)
         dmap.recompute_fov(player.x, player.y)
         for x in range(camera.width):
@@ -88,12 +91,15 @@ class Renderer:
         return con
         
 
-    def render(self, player, objects, dmap):
+    def render(self, player, objects, dmap, amulet):
         camera = self.camera
         con = self.console
         screen = self.screen
 
         map_console = self.render_map(player, objects, dmap)
         libtcod.console_blit(map_console, 0, 0, camera.width, camera.height, con, 1, 1)
+
+        # Draw amulet overlay
+        amulet.draw(con)
 
         libtcod.console_blit(con, 0, 0, screen.width, screen.height, 0, 0, 0)
