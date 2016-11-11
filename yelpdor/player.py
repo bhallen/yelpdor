@@ -1,7 +1,13 @@
 import math
+import random
 
 from yelpdor.game_obj import GameObj
 from yelpdor.gui.messenger import Messenger
+from yelpdor.npc import generate_name
+from yelpdor.utils import load_eventset
+
+
+FAN_COMMENT_PROBABILITY = 0.2
 
 
 class Player(GameObj):  # pylint: disable=too-many-instance-attributes
@@ -21,6 +27,7 @@ class Player(GameObj):  # pylint: disable=too-many-instance-attributes
 
         self.dungeon_map = None
         self.district = None
+        self.amulet = None
 
     def set_level(self, dungeon_map, district):
         self.dungeon_map = dungeon_map
@@ -87,7 +94,19 @@ class Player(GameObj):  # pylint: disable=too-many-instance-attributes
         return review_accuracy
 
     def receive_payment(self):
-        payment = int(round(self.review_count * self.reputation))
-        self.dollars += payment
-        Messenger().message('You received {} dollars from your fans.'.format(payment))
-        Messenger().message('')
+        payment = int(round(math.log(self.review_count) * self.reputation))
+        payment += random.randint(-1, 2)
+        if payment > 0:
+            events = load_eventset('fanstory')
+            self.dollars += payment
+            Messenger().message('You received {} dollar{} from your fans.'.format(
+                payment,
+                's' if payment > 1 else '',
+            ))
+            if random.random() < FAN_COMMENT_PROBABILITY:
+                name, surname = generate_name()
+                Messenger().message('{} writes "{}"'.format(
+                    name + ' ' + surname[0] + '.',
+                    random.choice(events)),
+                )
+            Messenger().message('')
