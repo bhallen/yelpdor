@@ -8,11 +8,11 @@ from yelpdor.menu.stats_menu import StatsMenu
 
 class MainMenu(AmuletMenu):
 
-    def __init__(self, panel):
+    def __init__(self, panel, player, district):
         super(self.__class__, self).__init__(panel)
         self.name = 'Nearby restaurants'
         self.menu = [
-            NearbyRestaurantMenu(self.panel),
+            NearbyRestaurantMenu(self.panel, player, district),
             StatsMenu(self.panel),
             HelpMenu(self.panel),
         ]

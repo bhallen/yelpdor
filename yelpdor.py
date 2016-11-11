@@ -99,7 +99,7 @@ messenger = Messenger(
 player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, '@', libtcod.white)
 dungeon_objects = [player]
 player.x, player.y = dungeon_map.spawn
-amulet = Amulet(player, 3, 3)
+amulet = Amulet(player, 3, 3, district)
 
 while not libtcod.console_is_window_closed():
     renderer.render(player, dungeon_objects, dungeon_map, amulet)
