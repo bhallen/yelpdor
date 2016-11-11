@@ -21,6 +21,7 @@ class Player(GameObj):  # pylint: disable=too-many-instance-attributes
 
         self.dungeon_map = None
         self.district = None
+        self.amulet = None
 
     def set_level(self, dungeon_map, district):
         self.dungeon_map = dungeon_map

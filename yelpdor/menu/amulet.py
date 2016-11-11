@@ -27,6 +27,9 @@ class Amulet(object):
     def current_menu(self):
         return self.menu_stack[-1]
 
+    def is_blocking(self):
+        return self.current_menu().blocking
+
     def draw(self, con):
         self.current_menu().show()
         libtcod.console_blit(self.panel, 0, 0, 0, 0, con, self.x_pos, self.y_pos)
@@ -59,5 +62,7 @@ class Amulet(object):
 
     def push_menu(self, menu):
         assert isinstance(menu, AmuletMenu)
+
+        menu.panel = self.panel
 
         self.menu_stack.append(menu)

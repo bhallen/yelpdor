@@ -1,3 +1,4 @@
+import yelpdor.city
 from yelpdor.menu.amulet_menu import AmuletMenu
 from yelpdor.menu.amulet_menu import draw_menu
 from yelpdor.menu.message import MessageMenu
@@ -5,15 +6,19 @@ from yelpdor.menu.message import MessageMenu
 
 class ReviewExperienceMenu(AmuletMenu):
 
-    def __init__(self, panel, business_name):
+    def __init__(self, panel, business_name, review_callback):
         super(self.__class__, self).__init__(panel)
         self.name = 'Review Experience'
         self.business_name = business_name
+        self.review_callback = review_callback
+        self.blocking = True
 
+        # This is copied from Restaurant.ordered_facets, should be cleaned up
+        # Reverse ordered for display
         self.facets = [
-            'Cleanliness',
+            'Food/Drinks',
             'Service',
-            'Food',
+            'Cleanliness'
         ]
         self.reviewed = []
 
@@ -21,11 +26,11 @@ class ReviewExperienceMenu(AmuletMenu):
     def show(self):
         print_msg = super(ReviewExperienceMenu, self).make_msg_print_func()
 
-        msg = 'Please rate the {facet} at {business}:'.format(
+        msg = '{facet} score? (1-5)'.format(
             facet=self.facets[-1],
-            business=self.business_name
         )
-        print_msg(0, msg)
+        print_msg(0, self.business_name)
+        print_msg(1, msg)
 
     def select_option(self, num):
         if num >= 1 and num <= 5:
@@ -36,4 +41,6 @@ class ReviewExperienceMenu(AmuletMenu):
         if self.facets:
             return 'Still review...'
         else:
+            review = yelpdor.city.Review([(facet, score) for facet, score in self.reviewed])
+            self.review_callback(review)
             return None

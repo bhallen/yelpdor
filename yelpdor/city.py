@@ -83,6 +83,8 @@ class Business:
 
     def __init__(self):
         self.fulfillment_multiplier = 1
+        self.name = None
+        self.visited = False
 
     def generate_facet_score(self):
         score = -1
@@ -133,24 +135,26 @@ class Business:
         if self.visited:
             Messenger().message('You\'ve already visited this business. Try going somewhere else.')
         elif player.dollars < self.cost:
-             Messenger().message('You can\'t afford to eat here.')
+            Messenger().message('You can\'t afford to eat here.')
         else:
             e = Experience(self)
             e.describe()
             Messenger().message(' ')
-            player.hunger = max(0, player.hunger - self.facet_ratings['Food/Drinks'] * self.fulfillment_multiplier)
+            hunger_dmg = self.facet_ratings['Food/Drinks'] * self.fulfillment_multiplier
+            player.hunger = max(0, player.hunger - hunger_dmg)
             player.dollars -= self.cost
 
-    def leave_review(self, player, amulet):
+    def leave_review(self, player):
         self.visited = True
 
-        review_menu = ReviewExperienceMenu(self.panel, self.name)
-        amulet.push_menu(review_menu)
-        review = Review([(facet, score) for facet, score in review_menu.reviewed])
+        def callback(review):
+            Messenger().message('You leave a review of {}.'.format(self.name))
+            Messenger().message('{}.'.format(review))
+            Messenger().message(' ')
+            player.update_reviewing_stats(review, self)
 
-        Messenger().message('You leave a review of {}...'.format(self.name))
-        Messenger().message(' ')
-        player.update_reviewing_stats(review, self)
+        review_menu = ReviewExperienceMenu(None, self.name, callback)
+        player.amulet.push_menu(review_menu)
 
 
 class Restaurant(Business):

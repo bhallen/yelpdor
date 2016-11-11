@@ -26,6 +26,7 @@ class AmuletMenu(object):
     def __init__(self, panel):
         self.name = 'Name'
         self.panel = panel
+        self.blocking = False
 
     @abstractmethod
     def show(self):
