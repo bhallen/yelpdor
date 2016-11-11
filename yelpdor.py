@@ -2,6 +2,7 @@ from lib import libtcodpy as libtcod
 
 from yelpdor.amulet import Amulet
 from yelpdor.camera import Camera
+from yelpdor.city import District
 from yelpdor.city_map_generator import generate_city_map
 from yelpdor.player import Player
 from yelpdor.renderer import Renderer
@@ -41,20 +42,16 @@ def handle_keys():
     #movement keys
     if libtcod.console_is_key_pressed(libtcod.KEY_UP):
         player.move(dungeon_map, 0, -1)
-        messenger.message("you moved UP")
  
     elif libtcod.console_is_key_pressed(libtcod.KEY_DOWN):
         player.move(dungeon_map, 0, 1)
-        messenger.message("you moved SOUTH")
  
     elif libtcod.console_is_key_pressed(libtcod.KEY_LEFT):
         player.move(dungeon_map, -1, 0)
-        messenger.message("you moved WEST")
  
     elif libtcod.console_is_key_pressed(libtcod.KEY_RIGHT):
         player.move(dungeon_map, 1, 0)
-        messenger.message("you moved WEST. Confused? Me too! We should get together and talk about it, maybe over beers! The problem is, with our sense of direction, we'd never find each other.")
- 
+
  
 #############################################
 # Initialization & Main Loop
@@ -64,22 +61,23 @@ libtcod.console_set_custom_font('res/arial10x10.png', libtcod.FONT_TYPE_GREYSCAL
 libtcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT, 'Amulet of Yelpdor', False)
 libtcod.sys_set_fps(LIMIT_FPS)
 console = libtcod.console_new(SCREEN_WIDTH, SCREEN_HEIGHT)
- 
-player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, '@', libtcod.white)
-dungeon_objects = [player]
 
+
+dungeon = District()
 dungeon_map = generate_city_map(MAP_WIDTH, MAP_HEIGHT)
-player.x, player.y = dungeon_map.spawn
 dungeon_map.init_fov_map()
 screen = Screen(width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
 camera = Camera(CAMERA_WIDTH, CAMERA_HEIGHT, dungeon_map) 
 renderer = Renderer(console, screen, camera)
-amulet = Amulet(player, 3, 3)
 messenger = Messenger(
     width=MESSENGER_WIDTH,
     height=MESSENGER_HEIGHT,
     screen=screen)
 
+player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, '@', libtcod.white)
+dungeon_objects = [player]
+player.x, player.y = dungeon_map.spawn
+amulet = Amulet(player, 3, 3)
 
 while not libtcod.console_is_window_closed():
     renderer.render(player, dungeon_objects, dungeon_map, amulet)

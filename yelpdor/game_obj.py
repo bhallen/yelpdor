@@ -11,7 +11,6 @@ class GameObj:
         self.char = char
         self.color = color
 
-
     def move(self, dmap, dx, dy):
         #move by the given amount, if the destination is not blocked
         if not dmap[self.x + dx][self.y + dy].blocked:

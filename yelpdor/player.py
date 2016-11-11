@@ -1,6 +1,7 @@
 import sys
 
 from game_obj import GameObj
+from yelpdor.gui.messenger import Messenger
 
 class Player(GameObj):
 
@@ -14,6 +15,13 @@ class Player(GameObj):
         self.ticks_between_payments = 20
         self.ticks_between_hunger_ticks = 1
 
+    def move(self, dmap, dx, dy):
+        # move by the given amount, if the destination is not blocked
+        if not dmap[self.x + dx][self.y + dy].blocked:
+            self.x += dx
+            self.y += dy
+        self.tick()
+
     def tick(self):
         self.total_ticks += 1
         if self.total_ticks % self.ticks_between_hunger_ticks == 0:
@@ -26,9 +34,9 @@ class Player(GameObj):
         if self.hunger >= 100:
             sys.exit("You are dead.")
         elif self.hunger > 40 and self.hunger < 80 and self.hunger % 10 == 0:
-            print 'You are hungry.'
+            Messenger().message('You are hungry.')
         elif self.hunger >= 80 and self.hunger % 3 == 0:
-            print 'You are starving. Literally.'
+            Messenger().message('You are starving. Literally.')
 
     def update_reviewing_stats(self, player_review, business):
         self.review_count += 1
@@ -40,8 +48,7 @@ class Player(GameObj):
     def receive_payment(self):
         payment = int(round(self.review_count * self.reputation))
         self.dollars += payment
-        print 'You received {} dollars from your fans.'.format(payment)
-        print 'You have a total of {} dollars.'.format(self.dollars)
-        print ''
+        Messenger().message('You received {} dollars from your fans.'.format(payment))
+        Messenger().message('You have a total of {} dollars.'.format(self.dollars))
 
 
