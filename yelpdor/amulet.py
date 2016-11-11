@@ -1,23 +1,11 @@
 from lib.libtcodpy import *
 from collections import namedtuple
+from yelpdor.amulet_menu import MainMenu
 
 PANEL_WIDTH = 30
 PANEL_HEIGHT = 15
 
 MenuOption = namedtuple('MenuOption', ['name', 'function'])
-
-
-def draw_menu(func):
-    '''Decorator for menu drawing.
-
-    Wraps the drawing of menus to clear and initialize the canvas.
-    '''
-    def decorator(self):
-        console_set_default_background(self.panel,light_red)
-        console_clear(self.panel)
-
-        func(self)
-    return decorator
 
 
 class Amulet:
@@ -32,11 +20,7 @@ class Amulet:
 
         self.panel = console_new(PANEL_WIDTH, PANEL_HEIGHT)
         self.mode = Amulet.STATS_MODE
-        self.menu = [
-            MenuOption('Nearby restaurants', self.show_restaurant),
-            MenuOption('Stats', self.show_stats),
-            MenuOption('Show Help', self.show_help),
-        ]
+        self.main_menu = MainMenu(self.panel)
 
 
 
@@ -50,7 +34,7 @@ class Amulet:
         if self.mode == Amulet.STATS_MODE:
             self.mode = Amulet.AMULET_MODE
 
-            self.main_menu()
+            self.main_menu.show()
         elif self.mode == Amulet.AMULET_MODE:
             self.mode = Amulet.STATS_MODE
             console_set_default_background(self.panel,black)
@@ -58,34 +42,6 @@ class Amulet:
         else:
             raise Exception('Unsupported mode')
 
-
-    @draw_menu
-    def main_menu(self):
-        line_num = 0
-        console_print(self.panel, 0, line_num, 'Amulet of Yelpdor')
-
-        for num, menu_option in enumerate(self.menu):
-            line_num += 1
-            msg = '{}. {}'.format(num, menu_option.name)
-            console_print(self.panel, 0, line_num, msg)
-
-    @draw_menu
-    def show_help(self):
-        console_print(self.panel, 0, 0, 'This is the help menu')
-
-    @draw_menu
-    def show_restaurant(self):
-        line_num = 0
-        console_print(self.panel, 0, line_num, 'The following restaurants are nearby:')
-        restaurants = ['Working Girls', 'Gary Danko']
-
-        for num, name in enumerate(restaurants, start=1):
-            line_num += 1
-            console_print(self.panel, 0, line_num, '{}. {}'.format(num, name))
-
-    @draw_menu
-    def show_stats(self):
-        console_print(self.panel, 0, 0, 'Detailed statistics')
 
     def draw_stats(self, con):
         console_print(con, self.x, self.y, 'Review count: {}'.format(self.player.review_count))
@@ -103,8 +59,5 @@ class Amulet:
         else:
             raise Exception('Amulet does not support this input value: {}'.format(key))
 
-        if num >= len(self.menu):
-            # Ignore invalid menu options
-            return
 
-        self.menu[num].function()
+        self.main_menu.select_option(num)
