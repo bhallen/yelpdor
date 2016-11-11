@@ -1,5 +1,11 @@
-import numpy.random
 from collections import defaultdict
+import numpy.random
+import os
+import random
+
+import lib.libtcodpy as libtcod
+
+from yelpdor.npc import NPC
 
 BIZ_COUNT = 10
 BIZ_TRUE_RATING_DISTRIBUTION = [0.2, 0.2, 0.2, 0.2, 0.2]
@@ -7,8 +13,9 @@ BIZ_TRUE_RATING_DISTRIBUTION = [0.2, 0.2, 0.2, 0.2, 0.2]
 FACET_SD = 1.5
 FACET_REVIEW_SD = 1.5
 REVIEW_COUNT_SD = 5
-
 REVIEW_COUNT_MEAN = 3
+
+REGION_NAME_CFG_PATH = os.path.dirname(os.path.realpath(__file__)) + '/../res/namegen/jice_region.cfg'
 
 class District:
     """A level or floor of the city containing Businesses.
@@ -36,9 +43,6 @@ class District:
 class Business:
     """A Business with its true scores, category, reviews, etc.
     """
-
-    def generate_name(self):
-        return 'Nyarlathotep\'s Bagel Shop'
 
     def generate_facet_score(self):
         score = -1
@@ -97,7 +101,15 @@ class Restaurant(Business):
 
     ordered_facets = ['Food/Drinks', 'Service', 'Cleanliness'] # ordered for display
 
+    foods = ['Taco', 'Ramen', 'Burger', 'Cheesesteak', 'Cold-Pressed Worg Tongue']
+    restaurant_types = ['Shop', 'Bar', 'Parlor', 'Shack']
+    cafe_names = ['Anvil', 'Chthonic']
+
+
     def __init__(self, mean, review_count_mean):
+        libtcod.namegen_parse(REGION_NAME_CFG_PATH)
+
+        self.owner = NPC()
         self.name = self.generate_name()
         self.true_rating = mean
         self.facet_ratings = {facet: self.generate_facet_score() for facet in self.ordered_facets}
@@ -117,13 +129,23 @@ class Restaurant(Business):
             'True rating: {}'.format(format_rating(self.true_rating)),
             '\n'.join(['> True {}: {}'.format(
                 facet, format_rating(self.facet_ratings[facet])) for facet in self.ordered_facets]),
-            'Review aggregate: {} overall (based on {} reviews)'.format(
+            'Review aggregate: {} (based on {} reviews)'.format(
                 format_rating(self.rounded_aggregated_overall_rating), self.review_count),
             '\n'.join(['> {}: {}'.format(
                 facet, format_rating(self.rounded_aggregated_facet_ratings[facet])) for facet in self.ordered_facets]),
             'Check business.reviews to see individual reviews.'
             # '\n'.join(['> Review {}\n{}'.format(i+1, review) for i, review in enumerate(self.reviews)])
             ])
+
+    def generate_name(self):
+        name_recipes = [
+            '{} Danko'.format(self.owner.name),
+            '{}\'s {} {}'.format(self.owner.name, random.choice(self.foods), random.choice(self.restaurant_types)),
+            '{} King'.format(random.choice(self.foods)),
+            'Cafe {}'.format(random.choice(self.cafe_names)),
+            '{}'.format(libtcod.namegen_generate('region'))
+        ]
+        return random.choice(name_recipes)
 
 
 class Review:
