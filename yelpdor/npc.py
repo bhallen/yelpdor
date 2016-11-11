@@ -12,7 +12,7 @@ class NPC(GameObj):
 
     types = ['Mesopotamian female',
              'Mesopotamian male',
-             'elf male'
+             'elf male',
              'dwarf female',
              'dwarf male']
 
