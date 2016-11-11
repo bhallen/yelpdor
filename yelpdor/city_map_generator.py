@@ -104,7 +104,6 @@ def generate_city_map(width, height):
     dmap.rooms = []
 
     def create_room(rect):
-        print(rect.x1, rect.x2, rect.y1, rect.y2)
         for y in range(rect.y1, rect.y2):
             for x in range(rect.x1, rect.x2):
                 if x == rect.x1 or x == rect.x2 - 1 or y == rect.y1 or y == rect.y2 - 1:
