@@ -8,32 +8,47 @@ HUMAN_NAME_CFG_PATH = os.path.dirname(os.path.realpath(__file__)) + '/../res/tex
 DWARF_NAME_CFG_PATH = os.path.dirname(os.path.realpath(__file__)) + '/../res/textgen/mingos_dwarf.cfg'
 ELF_NAME_CFG_PATH = os.path.dirname(os.path.realpath(__file__)) + '/../res/textgen/lbeer_elven.cfg'
 
+libtcod.namegen_parse(HUMAN_NAME_CFG_PATH)
+libtcod.namegen_parse(DWARF_NAME_CFG_PATH)
+libtcod.namegen_parse(ELF_NAME_CFG_PATH)
+
+NAME_TYPES = ['Mesopotamian female',
+         'Mesopotamian male',
+         'elf male',
+         'dwarf female',
+         'dwarf male']
+
+
+def generate_name(name_type=None):
+    # returns a tuple of (name, surname)
+
+    if not name_type:
+        name_type = random.choice(NAME_TYPES)
+    name = libtcod.namegen_generate(name_type)
+
+    if name_type in ['dwarf female', 'dwarf male']: # types with distinct surnames
+        surname = libtcod.namegen_generate('dwarf surname')
+    elif name_type in ['Mesopotamian female', 'Mesopotamian male']:
+        surname = libtcod.namegen_generate(name_type)
+    elif name_type in ['elf female', 'elf male']:
+        surname = libtcod.namegen_generate(name_type)
+    
+    return (name, surname)
+
+
 class NPC(GameObj):
 
-    types = ['Mesopotamian female',
-             'Mesopotamian male',
-             'elf male',
-             'dwarf female',
-             'dwarf male']
-
     def __init__(self):
-        libtcod.namegen_parse(HUMAN_NAME_CFG_PATH)
-        libtcod.namegen_parse(DWARF_NAME_CFG_PATH)
-        libtcod.namegen_parse(ELF_NAME_CFG_PATH)
+        self.type = random.choice(NAME_TYPES)
 
-        self.type = random.choice(self.types)
-        self.name = libtcod.namegen_generate(self.type)
-
+        self.name, self.surname = generate_name(self.type)
         self.color = libtcod.Color(255, 255, 0)
 
-        if self.type in ['dwarf female', 'dwarf male']: # types with distinct surnames
-            self.surname = libtcod.namegen_generate('dwarf surname')
+        if self.type in ['dwarf female', 'dwarf male']:
             self.char = 'd'
         elif self.type in ['Mesopotamian female', 'Mesopotamian male']:
-            self.surname = libtcod.namegen_generate(self.type)
             self.char = 'h'
         elif self.type in ['elf female', 'elf male']:
-            self.surname = libtcod.namegen_generate(self.type)
             self.char = 'e'
 
     def __repr__(self):
