@@ -138,11 +138,12 @@ class Business:
             player.dollars -= self.cost
 
     def leave_review(self, player):
-        self.visited = True
-        fake_player_review = self.generate_review()
-        Messenger().message('You leave a review of {}...'.format(self.name))
-        Messenger().message(' ')
-        player.update_reviewing_stats(fake_player_review, self)
+        if not self.visited:
+            self.visited = True
+            fake_player_review = self.generate_review()
+            Messenger().message('You leave a review of {}...'.format(self.name))
+            Messenger().message(' ')
+            player.update_reviewing_stats(fake_player_review, self)
 
 
 class Restaurant(Business):
