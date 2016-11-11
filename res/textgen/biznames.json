@@ -1,0 +1,37 @@
+{
+  "recipes": [
+    "{owner} Danko",
+    "{owner}'s {food} {restaurant_type}",
+    "{food} {food_suffix}",
+    "Cafe {cafe_name}",
+    "{region}"
+  ],
+  "food": [
+    "Taco",
+    "Ramen",
+    "Burger",
+    "Cheesesteak",
+    "Cold-Pressed Worg Tongue"
+  ],
+  "restaurant_type": [
+    "Shop",
+    "Bar",
+    "Parlor",
+    "Shack",
+    "Land"
+  ],
+  "food_suffix": [
+    "King",
+    "Emperor",
+    "Master",
+    "Guru",
+    "Lord"
+  ],
+  "cafe_name": [
+    "Anvil",
+    "Chthonic",
+    "Miasma",
+    "Kris",
+    "Dodgeroll"
+  ]
+}

@@ -13,6 +13,7 @@ from yelpdor.gui.messenger import Messenger
 from yelpdor.npc import NPC
 from yelpdor.tile import create_tile
 from yelpdor.tile import TileType
+import utils
 
 BIZ_COUNT = 10
 BIZ_TRUE_RATING_DISTRIBUTION = [0.2, 0.2, 0.2, 0.2, 0.2]
@@ -29,12 +30,11 @@ REGION_NAME_CFG_PATH = os.path.dirname(os.path.realpath(__file__)) + '/../res/na
 class District:
     """A level or floor of the city containing Businesses.
 
-    count: int
-        Number of Businesses in the District
     distribution: list of floats (length 5)
         Probability of businesses having true score means with the values [1, 2, 3, 4, 5], respectively.
     review_count_mean: int
         mean for generating review count
+    bizname_data: dict from biznames.json
     """
 
     def __init__(self,
@@ -44,6 +44,7 @@ class District:
         self.business_coords_to_name = {}
         self.distribution = distribution
         self.review_count_mean = review_count_mean
+        self.bizname_data = utils.load_name_recipes('biznames')
 
     def __repr__(self):
         return '\n\n'.join([str(business) for business in self.businesses])
@@ -52,12 +53,11 @@ class District:
         return self.__repr__()
 
     def add_business(self, room):
-        biz = Restaurant(
-           numpy.random.choice(range(1, 6), p=self.distribution),
-           self.review_count_mean,
-           RESTAURANT_COST,
-           room
-        )
+        biz = Restaurant(numpy.random.choice(range(1, 6), p=self.distribution),
+                         self.review_count_mean,
+                         RESTAURANT_COST,
+                         room,
+                         self.bizname_data)
         self.businesses.append(biz)
         return biz
 
@@ -150,17 +150,14 @@ class Restaurant(Business):
     review_count_mean: int
         mean for generating review count
     room: Rect
+    bizname_data: dict from biznames.json
     """
 
     ordered_facets = ['Food/Drinks', 'Service', 'Cleanliness'] # ordered for display
 
-    foods = ['Taco', 'Ramen', 'Burger', 'Cheesesteak', 'Cold-Pressed Worg Tongue']
-    restaurant_types = ['Shop', 'Bar', 'Parlor', 'Shack', 'Land']
-    food_suffix = ['King', 'Emperor', 'Master', 'Guru', 'Lord']
-    cafe_names = ['Anvil', 'Chthonic', 'Miasma', 'Kris', 'Dodgeroll']
-
-    def __init__(self, mean, review_count_mean, cost, room):
+    def __init__(self, mean, review_count_mean, cost, room, bizname_data):
         libtcod.namegen_parse(REGION_NAME_CFG_PATH)
+        self.bizname_data = bizname_data
 
         self.owner = NPC()
         self.name = self.generate_name()
@@ -193,14 +190,10 @@ class Restaurant(Business):
             ])
 
     def generate_name(self):
-        name_recipes = [
-            '{} Danko'.format(self.owner.name),
-            '{}\'s {} {}'.format(self.owner.name, random.choice(self.foods), random.choice(self.restaurant_types)),
-            '{} {}'.format(random.choice(self.foods), random.choice(self.food_suffix)),
-            'Cafe {}'.format(random.choice(self.cafe_names)),
-            '{}'.format(libtcod.namegen_generate('region'))
-        ]
-        return random.choice(name_recipes)
+        recipe = random.choice(self.bizname_data['recipes'])
+        fillers = {label: random.choice(content) for label, content in self.bizname_data.items() if label != 'recipes'}
+        fillers.update({'owner': self.owner.name, 'region': libtcod.namegen_generate('region')})
+        return recipe.format(**fillers)
 
 
 class Review:
@@ -214,7 +207,10 @@ class Review:
 
 
 def format_rating(rating):
-    return '[{}{}]'.format('*'*rating, ' '*(5-rating))
+    if rating > 0:
+        return '[{}{}]'.format('*'*rating, ' '*(5-rating))
+    else:
+        return '[  ?  ]'
 
 
 if __name__ == "__main__":
