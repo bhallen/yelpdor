@@ -6,11 +6,7 @@ from yelpdor.city_map_generator import generate_city_map
 from yelpdor.player import Player
 from yelpdor.renderer import Renderer
 from yelpdor.renderer import Screen 
-<<<<<<< ebc41918eb8064076be5fdd1883036188c58284e
-=======
 from yelpdor.gui.messenger import Messenger
-from yelpdor.simple_dungeon import make_map
->>>>>>> messenger gui bar
 
 
 MAP_WIDTH = 256 
