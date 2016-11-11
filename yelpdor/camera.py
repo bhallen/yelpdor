@@ -33,10 +33,10 @@ class Camera:
             nx = 0
         if ny < 0:
             ny = 0
-        if nx > self.dmap.width - self.width - 1:
-            nx = self.dmap.width - self.width - 1
-        if ny > self.dmap.height - self.height- 1:
-            ny = self.dmap.height - self.height - 1
+        if nx > self.dmap.width - self.width:
+            nx = self.dmap.width - self.width
+        if ny > self.dmap.height - self.height:
+            ny = self.dmap.height - self.height
  
         if nx != self.x or ny != self.y: fov_recompute = True
 
