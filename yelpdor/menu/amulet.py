@@ -2,7 +2,7 @@ from collections import namedtuple
 
 from lib import libtcodpy as libtcod
 from lib.libtcodpy import console_print
-from yelpdor.amulet_menu import MainMenu
+from yelpdor.menu.main_menu import MainMenu
 
 PANEL_WIDTH = 30
 PANEL_HEIGHT = 15
@@ -22,7 +22,11 @@ class Amulet(object):
 
         self.panel = libtcod.console_new(PANEL_WIDTH, PANEL_HEIGHT)
         self.mode = Amulet.STATS_MODE
-        self.main_menu = MainMenu(self.panel)
+        self.menu_stack = []
+        self.menu_stack.append(MainMenu(self.panel))
+
+    def current_menu(self):
+        return self.menu_stack[-1]
 
     def draw(self, con):
         if self.mode == Amulet.AMULET_MODE:
@@ -35,7 +39,7 @@ class Amulet(object):
         if self.mode == Amulet.STATS_MODE:
             self.mode = Amulet.AMULET_MODE
 
-            self.main_menu.show()
+            self.current_menu().show()
         elif self.mode == Amulet.AMULET_MODE:
             self.mode = Amulet.STATS_MODE
             libtcod.console_set_default_background(self.panel, libtcod.black)
@@ -61,4 +65,13 @@ class Amulet(object):
             raise Exception(
                 'Amulet does not support this input value: {}'.format(key))
 
-        self.main_menu.select_option(num)
+        self.select_option(num)
+
+    def select_option(self, num):
+        menu = self.current_menu().select_option(num)
+        if menu:
+            self.menu_stack.append(menu)
+        else:
+            self.menu_stack.pop()
+
+        self.current_menu().show()
