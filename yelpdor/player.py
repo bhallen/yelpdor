@@ -1,10 +1,10 @@
 import math
-import sys
 
-from game_obj import GameObj
+from yelpdor.game_obj import GameObj
 from yelpdor.gui.messenger import Messenger
 
-class Player(GameObj):
+
+class Player(GameObj):  # pylint: disable=too-many-instance-attributes
 
     def __init__(self, x, y, char, color):
         GameObj.__init__(self, x, y, char, color)
@@ -12,7 +12,7 @@ class Player(GameObj):
         self.review_count = 0
         self.reputation = 0
         self.fame_level = 0
-        self.health = 100 # percent
+        self.health = 100  # percent
         self.hunger = 0  # percent; health starts decreasing at 100% hunger
         self.dollars = 20
         self.ticks_between_payments = 20
@@ -49,9 +49,12 @@ class Player(GameObj):
 
     def tick_hunger(self):
         if self.health == 0:
-            Messenger().message("You are dead.")
+            Messenger().message('You are dead.')
         elif self.hunger == 100:
-            Messenger().message("You are starving to death.")
+            if self.health > 30:
+                Messenger().message('You are starving to death.')
+            else:
+                Messenger().message('You are literally starving to death. Quite literally.')
             self.health -= 1
         else:
             self.hunger += 1
@@ -59,7 +62,6 @@ class Player(GameObj):
                 Messenger().message('You are hungry.')
             elif self.hunger >= 80 and self.hunger % 3 == 0:
                 Messenger().message('You are very hungry.')
-
 
     def update_reviewing_stats(self, player_review, business):
         self.review_count += 1
@@ -72,10 +74,7 @@ class Player(GameObj):
             Messenger().message('')
         return review_accuracy
 
-
     def receive_payment(self):
         payment = int(round(self.review_count * self.reputation))
         self.dollars += payment
         Messenger().message('You received {} dollars from your fans.'.format(payment))
-
-
