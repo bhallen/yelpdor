@@ -14,6 +14,8 @@ FACET_SD = 1.5
 FACET_REVIEW_SD = 1.5
 REVIEW_COUNT_SD = 5
 REVIEW_COUNT_MEAN = 3
+EXPECTED_REVIEW_COUNT = 0
+EXPECTED_REPUTATION = 0
 
 REGION_NAME_CFG_PATH = os.path.dirname(os.path.realpath(__file__)) + '/../res/namegen/jice_region.cfg'
 
@@ -28,7 +30,10 @@ class District:
         mean for generating review count
     """
 
-    def __init__(self, count=BIZ_COUNT, distribution=BIZ_TRUE_RATING_DISTRIBUTION, review_count_mean=REVIEW_COUNT_MEAN):
+    def __init__(self,
+                 count=BIZ_COUNT,
+                 distribution=BIZ_TRUE_RATING_DISTRIBUTION,
+                 review_count_mean=REVIEW_COUNT_MEAN):
         self.businesses = []
         for mean in numpy.random.choice(range(1, 6), p=distribution, size=count):
             self.businesses.append(Restaurant(mean, review_count_mean))
@@ -102,8 +107,9 @@ class Restaurant(Business):
     ordered_facets = ['Food/Drinks', 'Service', 'Cleanliness'] # ordered for display
 
     foods = ['Taco', 'Ramen', 'Burger', 'Cheesesteak', 'Cold-Pressed Worg Tongue']
-    restaurant_types = ['Shop', 'Bar', 'Parlor', 'Shack']
-    cafe_names = ['Anvil', 'Chthonic']
+    restaurant_types = ['Shop', 'Bar', 'Parlor', 'Shack', 'Land']
+    food_suffix = ['King', 'Emperor', 'Master', 'Guru', 'Lord']
+    cafe_names = ['Anvil', 'Chthonic', 'Miasma', 'Kris', 'Dodgeroll']
 
 
     def __init__(self, mean, review_count_mean):
@@ -141,7 +147,7 @@ class Restaurant(Business):
         name_recipes = [
             '{} Danko'.format(self.owner.name),
             '{}\'s {} {}'.format(self.owner.name, random.choice(self.foods), random.choice(self.restaurant_types)),
-            '{} King'.format(random.choice(self.foods)),
+            '{} {}'.format(random.choice(self.foods), random.choice(self.food_suffix)),
             'Cafe {}'.format(random.choice(self.cafe_names)),
             '{}'.format(libtcod.namegen_generate('region'))
         ]
