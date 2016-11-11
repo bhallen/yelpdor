@@ -57,5 +57,8 @@ class Room:
         self.rect = rect
         self.door = door
 
+    def center(self):
+        return self.rect.center()
+
     def contains(self, x, y):
         return self.rect.contains(x, y)
