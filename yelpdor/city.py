@@ -85,6 +85,7 @@ class Business:
         self.fulfillment_multiplier = 1
         self.name = None
         self.visited = False
+        self.reviewed = False
 
     def generate_facet_score(self):
         score = -1
@@ -143,10 +144,12 @@ class Business:
             hunger_dmg = self.facet_ratings['Food/Drinks'] * self.fulfillment_multiplier
             player.hunger = max(0, player.hunger - hunger_dmg)
             player.dollars -= self.cost
+            self.visited = True
 
     def leave_review(self, player):
-        if not self.visited:
-            self.visited = True
+        if not self.visited or self.reviewed:
+            return
+        self.reviewed = True
 
         def callback(review):
             Messenger().message('You leave a review of {}.'.format(self.name))
@@ -175,6 +178,7 @@ class Restaurant(Business):
         libtcod.namegen_parse(REGION_NAME_CFG_PATH)
 
         self.visited = False
+        self.reviewed = False
         self.bizname_data = bizname_data
         self.fulfillment_multiplier = fulfillment_multiplier
         self.owner = NPC()
