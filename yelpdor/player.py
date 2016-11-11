@@ -11,7 +11,7 @@ class Player(GameObj):
         self.reputation = 0
         self.hunger = 0  # death at 100 for now
         self.dollars = 20
-        self.ticks_between_payments = 100
+        self.ticks_between_payments = 20
         self.ticks_between_hunger_ticks = 1
 
     def tick(self):
@@ -30,13 +30,18 @@ class Player(GameObj):
         elif self.hunger >= 80 and self.hunger % 3 == 0:
             print 'You are starving. Literally.'
 
-    def update_reviewing_stats(self, facet_to_player_rating, business):
+    def update_reviewing_stats(self, player_review, business):
         self.review_count += 1
-        self.reputation += business.get_review_similarity(facet_to_player_rating)
+        review_accuracy = business.get_review_similarity(player_review)
+        self.reputation += review_accuracy
+        return review_accuracy
+
 
     def receive_payment(self):
-        payment = round(self.review_count * self.reputation)
-        print 'You received {} dollars from your fans.'.format(payment)
+        payment = int(round(self.review_count * self.reputation))
         self.dollars += payment
+        print 'You received {} dollars from your fans.'.format(payment)
+        print 'You have a total of {} dollars.'.format(self.dollars)
+        print ''
 
 

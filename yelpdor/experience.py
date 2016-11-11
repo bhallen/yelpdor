@@ -1,15 +1,12 @@
 import random
 import numpy.random
 
-from city import Restaurant
-
-
 class Experience:
 
     def __init__(self, business):
         self.business = business
         self.category_to_steps = {
-            Restaurant: [
+            'Restaurant': [
                 (self.initial_impression, 1.0),
                 # (self.ordering, 1.0),
                 # (self.waiting, 1.0),
@@ -18,8 +15,8 @@ class Experience:
         }
 
     def describe(self):
-        print self.business
-        for step in self.category_to_steps[self.business.__class__]:
+        print 'You visit a {} called {}.'.format(str(self.business.__class__.__name__).lower(), self.business.name)
+        for step in self.category_to_steps[self.business.__class__.__name__]:
             if random.random() < step[1]:
                 print step[0]()
 

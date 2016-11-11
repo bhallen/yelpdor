@@ -5,6 +5,7 @@ import random
 
 import lib.libtcodpy as libtcod
 
+from yelpdor.experience import Experience
 from yelpdor.npc import NPC
 
 BIZ_COUNT = 10
@@ -14,8 +15,7 @@ FACET_SD = 1.5
 FACET_REVIEW_SD = 1.5
 REVIEW_COUNT_SD = 5
 REVIEW_COUNT_MEAN = 3
-EXPECTED_REVIEW_COUNT = 0
-EXPECTED_REPUTATION = 0
+RESTAURANT_COST = 5
 
 REGION_NAME_CFG_PATH = os.path.dirname(os.path.realpath(__file__)) + '/../res/namegen/jice_region.cfg'
 
@@ -36,7 +36,7 @@ class District:
                  review_count_mean=REVIEW_COUNT_MEAN):
         self.businesses = []
         for mean in numpy.random.choice(range(1, 6), p=distribution, size=count):
-            self.businesses.append(Restaurant(mean, review_count_mean))
+            self.businesses.append(Restaurant(mean, review_count_mean, RESTAURANT_COST))
 
     def __repr__(self):
         return '\n\n'.join([str(business) for business in self.businesses])
@@ -86,13 +86,26 @@ class Business:
             rating = round(numpy.random.normal(loc=facet_rating, scale=FACET_REVIEW_SD))
         return int(rating)
 
-    def get_review_similarity(self, player_facet_ratings):
+    def get_review_similarity(self, player_review):
         """In range [0, 1], with 0 for all reviews differing from the true ratings by more than half of
         the maximum possible difference"""
         raw_difference = (((self.max_player_review_difference / 2.) -
-                sum([abs(player_facet_ratings[facet] - self.facet_ratings[facet]) for facet in self.ordered_facets])) /
+                sum([abs(player_review.ratings[facet] - self.facet_ratings[facet]) for facet in self.ordered_facets])) /
                 self.max_player_review_difference)
         return raw_difference if raw_difference >= 0 else 0
+
+    def visit(self, player):
+        if player.dollars < self.cost:
+            print 'You find a restaurant, but you can\'t afford to eat there.'
+        else:
+            player.dollars -= self.cost
+            e = Experience(self)
+            e.describe()
+            player.hunger -= self.facet_ratings['Food/Drinks']
+            fake_player_review = self.generate_review()
+            review_accuracy = player.update_reviewing_stats(fake_player_review, self)
+            print 'You leave a review of {}...'.format(self.name)
+            print '...and the review\'s accuracy is {}!'.format(review_accuracy)
 
 
 class Restaurant(Business):
@@ -111,8 +124,7 @@ class Restaurant(Business):
     food_suffix = ['King', 'Emperor', 'Master', 'Guru', 'Lord']
     cafe_names = ['Anvil', 'Chthonic', 'Miasma', 'Kris', 'Dodgeroll']
 
-
-    def __init__(self, mean, review_count_mean):
+    def __init__(self, mean, review_count_mean, cost):
         libtcod.namegen_parse(REGION_NAME_CFG_PATH)
 
         self.owner = NPC()
@@ -127,6 +139,7 @@ class Restaurant(Business):
         self.aggregated_overall_rating = self.aggregate_overall_reviews()
         self.rounded_aggregated_overall_rating = int(round(self.aggregated_overall_rating))
         self.max_player_review_difference = 4.0 * len(self.ordered_facets)
+        self.cost = cost
         self.attributes = [] # not yet implemented
 
     def __repr__(self):
