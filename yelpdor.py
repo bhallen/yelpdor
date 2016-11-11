@@ -78,7 +78,7 @@ def handle_keys():
 #############################################
 
 libtcod.console_set_custom_font(
-    'res/arial10x10.png', libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_TCOD)
+    'res/dejavu16x16_gs_tc.png', libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_TCOD)
 libtcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT,
                           'Amulet of Yelpdor', False)
 libtcod.sys_set_fps(LIMIT_FPS)
@@ -98,7 +98,7 @@ messenger = Messenger(
 
 player = Player(dungeon_map.spawn[0], dungeon_map.spawn[1], '@', libtcod.white)
 dungeon_map.objects.append(player)
-amulet = Amulet(player, 3, 3)
+amulet = Amulet(player, 3, 3, district)
 
 while not libtcod.console_is_window_closed():
     renderer.render(player, dungeon_map, amulet)

@@ -1,4 +1,7 @@
 from collections import defaultdict
+import math
+import numpy as np
+import numpy.linalg
 import numpy.random
 import os
 import random
@@ -64,6 +67,13 @@ class District:
                 return biz
 
         return None
+
+    def sorted_by_distance(self, player):
+        return sorted(self.businesses, key=lambda biz: self.player_biz_distance(player, biz))
+
+    def player_biz_distance(self, player, biz):
+        # euclidean distance, i.e. distance as the crow flies
+        return numpy.linalg.norm(np.array(biz.room.center()) - np.array((player.x, player.y)))
 
 
 class Business:
@@ -198,7 +208,6 @@ class Review:
 
     def __repr__(self):
         return '\n'.join(['> > {}: {}'.format(facet, format_rating(self.ratings[facet])) for facet in self.ordered_facets])
-
 
 
 def format_rating(rating):

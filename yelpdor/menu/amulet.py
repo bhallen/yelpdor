@@ -15,7 +15,7 @@ class Amulet(object):
 
     AMULET_MODE, STATS_MODE = range(2)
 
-    def __init__(self, player, x=0, y=0):
+    def __init__(self, player, x=0, y=0, district=None):
         self.player = player
         self.x_pos = x
         self.y_pos = y
@@ -23,7 +23,7 @@ class Amulet(object):
         self.panel = libtcod.console_new(PANEL_WIDTH, PANEL_HEIGHT)
         self.mode = Amulet.STATS_MODE
         self.menu_stack = []
-        self.menu_stack.append(MainMenu(self.panel))
+        self.menu_stack.append(MainMenu(self.panel, player, district))
 
     def current_menu(self):
         return self.menu_stack[-1]
