@@ -16,7 +16,7 @@ class Player(GameObj):  # pylint: disable=too-many-instance-attributes
         self.hunger = 0  # percent; health starts decreasing at 100% hunger
         self.dollars = 20
         self.ticks_between_payments = 20
-        self.ticks_between_hunger_ticks = 1
+        self.ticks_between_hunger_ticks = 2
         self.current_business = ''
 
         self.dungeon_map = None
@@ -58,6 +58,9 @@ class Player(GameObj):  # pylint: disable=too-many-instance-attributes
             self.health -= 1
         else:
             self.hunger += 1
+            if self.hunger < 50:
+                if self.health != 100:
+                    self.health = self.health + 1
             if self.hunger > 40 and self.hunger < 80 and self.hunger % 10 == 0:
                 Messenger().message('You are hungry.')
             elif self.hunger >= 80 and self.hunger % 3 == 0:
