@@ -1,0 +1,8 @@
+[MESSAGE CONTROL]
+disable =
+    missing-docstring,
+    fixme,
+
+[REPORTS]
+output-format = colorized
+reports = no

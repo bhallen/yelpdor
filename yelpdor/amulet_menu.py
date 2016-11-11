@@ -1,4 +1,8 @@
-from lib.libtcodpy import *
+from abc import ABCMeta
+from abc import abstractmethod
+
+from lib import libtcodpy as libtcod
+from lib.libtcodpy import console_print
 
 
 def draw_menu(func):
@@ -6,9 +10,10 @@ def draw_menu(func):
 
     Wraps the drawing of menus to clear and initialize the canvas.
     '''
+
     def decorator(self):
-        console_set_default_background(self.panel,light_red)
-        console_clear(self.panel)
+        libtcod.console_set_default_background(self.panel, libtcod.light_red)
+        libtcod.console_clear(self.panel)
 
         func(self)
     return decorator
@@ -16,17 +21,19 @@ def draw_menu(func):
 
 class AmuletMenu(object):
 
+    __metaclass_ = ABCMeta
+
     def __init__(self, panel):
         self.name = 'Name'
         self.panel = panel
 
+    @abstractmethod
     def show(self):
-        '''Abstract method, subclass MUST implement'''
-        assert False, 'This should not be called'
+        pass
 
+    @abstractmethod
     def select_option(self, num):
-        '''Abstract method, subclass MUST implement'''
-        assert False, 'This should not be called'
+        pass
 
 
 class MainMenu(AmuletMenu):
@@ -58,6 +65,7 @@ class MainMenu(AmuletMenu):
 
 
 class NearbyRestaurantMenu(AmuletMenu):
+
     def __init__(self, panel):
         super(self.__class__, self).__init__(panel)
         self.name = 'Nearby restaurants'
@@ -66,7 +74,8 @@ class NearbyRestaurantMenu(AmuletMenu):
     @draw_menu
     def show(self):
         line_num = 0
-        console_print(self.panel, 0, line_num, 'The following restaurants are nearby:')
+        console_print(self.panel, 0, line_num,
+                      'The following restaurants are nearby:')
 
         for num, name in enumerate(self.restaurants, start=1):
             line_num += 1
@@ -74,17 +83,17 @@ class NearbyRestaurantMenu(AmuletMenu):
 
     @draw_menu
     def show_restaurant(self, name):
-        console_print(self.panel, 0, line_num, 'Info for the {}'.format(name))
-
+        console_print(self.panel, 0, 0, 'Info for the {}'.format(name))
 
     def select_option(self, num):
         if num >= len(self.restaurants):
             # Ignore invalid menu options
             return
-        show_restaurant(self.restaurants[num])
+        self.show_restaurant(self.restaurants[num])
 
 
 class StatsMenu(AmuletMenu):
+
     def __init__(self, panel):
         super(self.__class__, self).__init__(panel)
         self.name = 'Stats'
@@ -93,8 +102,12 @@ class StatsMenu(AmuletMenu):
     def show(self):
         console_print(self.panel, 0, 0, 'Detailed statistics')
 
+    def select_option(self, num):
+        pass
+
 
 class HelpMenu(AmuletMenu):
+
     def __init__(self, panel):
         super(self.__class__, self).__init__(panel)
         self.name = 'Show Help'
@@ -102,3 +115,6 @@ class HelpMenu(AmuletMenu):
     @draw_menu
     def show(self):
         console_print(self.panel, 0, 0, 'This is the help menu')
+
+    def select_option(self, num):
+        pass

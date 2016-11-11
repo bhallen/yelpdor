@@ -1,5 +1,9 @@
+# Globs
 *.pyc
-
 *.sw*
 
+# Files
 .DS_Store
+
+# Directories
+virtualenv_run/
