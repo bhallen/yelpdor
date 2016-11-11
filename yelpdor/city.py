@@ -32,18 +32,33 @@ class District:
     """
 
     def __init__(self,
-                 count=BIZ_COUNT,
                  distribution=BIZ_TRUE_RATING_DISTRIBUTION,
                  review_count_mean=REVIEW_COUNT_MEAN):
         self.businesses = []
-        for mean in numpy.random.choice(range(1, 6), p=distribution, size=count):
-            self.businesses.append(Restaurant(mean, review_count_mean, RESTAURANT_COST))
+        self.business_coords_to_name = {}
+        self.distribution = distribution
+        self.review_count_mean = review_count_mean
 
     def __repr__(self):
         return '\n\n'.join([str(business) for business in self.businesses])
 
     def __str__(self):
         return self.__repr__()
+
+    def add_business(self, room):
+        self.businesses.append(
+            Restaurant(numpy.random.choice(range(1, 6), p=self.distribution),
+                       self.review_count_mean,
+                       RESTAURANT_COST,
+                       room)
+        )
+
+    def find_business_containing_player(self, player):
+        for biz in self.businesses:
+            if biz.room.contains(player.x, player.y):
+                return biz
+
+        return None
 
 
 class Business:
@@ -116,6 +131,7 @@ class Restaurant(Business):
         The true overall rating of a Restaurant
     review_count_mean: int
         mean for generating review count
+    room: Rect
     """
 
     ordered_facets = ['Food/Drinks', 'Service', 'Cleanliness'] # ordered for display
@@ -125,7 +141,7 @@ class Restaurant(Business):
     food_suffix = ['King', 'Emperor', 'Master', 'Guru', 'Lord']
     cafe_names = ['Anvil', 'Chthonic', 'Miasma', 'Kris', 'Dodgeroll']
 
-    def __init__(self, mean, review_count_mean, cost):
+    def __init__(self, mean, review_count_mean, cost, room):
         libtcod.namegen_parse(REGION_NAME_CFG_PATH)
 
         self.owner = NPC()
@@ -141,6 +157,7 @@ class Restaurant(Business):
         self.rounded_aggregated_overall_rating = int(round(self.aggregated_overall_rating))
         self.max_player_review_difference = 4.0 * len(self.ordered_facets)
         self.cost = cost
+        self.room = room
         self.attributes = [] # not yet implemented
 
     def __repr__(self):

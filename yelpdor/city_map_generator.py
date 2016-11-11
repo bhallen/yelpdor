@@ -11,6 +11,8 @@ MAX_BLOCK_SIZE = 50
 MIN_BIZ_SIZE = 5
 MAX_BIZ_SIZE = 12
 
+BIZ_IN_ROOM_PROPORTION = 1.0
+
 def divide_line(length, min_size, max_size):
     # generates dividers in the range 0 <= i < length
     # such that the remaining intervals are between min_size and max_size
@@ -20,7 +22,7 @@ def divide_line(length, min_size, max_size):
         divide_point = random.randint(max(min_size, length - max_size - 1), length - min_size - 1)
         return divide_line(divide_point, min_size, max_size) + [divide_point]
 
-def generate_city_map(width, height):
+def generate_city_map(width, height, district):
     # generates a grid-based city map
 
     dmap = DungeonMap(width, height)
@@ -209,5 +211,11 @@ def generate_city_map(width, height):
         if len(good_spots) > 0:
             door_x, door_y = random.choice(good_spots)
             dmap[door_x][door_y] = create_tile(TileType.door)
+
+    # create businesses
+    random.shuffle(dmap.rooms)
+    for i, room in enumerate(dmap.rooms):
+        if float(i) / len(dmap.rooms) < BIZ_IN_ROOM_PROPORTION:
+            district.add_business(room)
 
     return dmap

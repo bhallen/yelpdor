@@ -52,6 +52,12 @@ def handle_keys():
     elif libtcod.console_is_key_pressed(libtcod.KEY_RIGHT):
         player.move(dungeon_map, 1, 0)
 
+    # check position for events
+    player_business = district.find_business_containing_player(player)
+    if player_business and player.current_business != player_business:
+        player.current_business = player_business
+        Messenger().message('You are inside the business {}.'.format(player_business.name))
+
  
 #############################################
 # Initialization & Main Loop
@@ -63,8 +69,8 @@ libtcod.sys_set_fps(LIMIT_FPS)
 console = libtcod.console_new(SCREEN_WIDTH, SCREEN_HEIGHT)
 
 
-dungeon = District()
-dungeon_map = generate_city_map(MAP_WIDTH, MAP_HEIGHT)
+district = District()
+dungeon_map = generate_city_map(MAP_WIDTH, MAP_HEIGHT, district)
 dungeon_map.init_fov_map()
 screen = Screen(width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
 camera = Camera(CAMERA_WIDTH, CAMERA_HEIGHT, dungeon_map) 

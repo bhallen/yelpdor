@@ -14,6 +14,7 @@ class Player(GameObj):
         self.dollars = 20
         self.ticks_between_payments = 20
         self.ticks_between_hunger_ticks = 1
+        self.current_business = ''
 
     def move(self, dmap, dx, dy):
         # move by the given amount, if the destination is not blocked
