@@ -77,6 +77,8 @@ class District:
 class Business:
     """A Business with its true scores, category, reviews, etc.
     """
+    def __init__(self):
+        self.fulfillment_multiplier = 1
 
     def generate_facet_score(self):
         score = -1
@@ -129,9 +131,8 @@ class Business:
         else:
             e = Experience(self)
             e.describe()
-            Messenger().message(' ')
+            player.hunger = max(0, player.hunger - self.facet_ratings['Food/Drinks'] * self.fulfillment_multiplier)
             player.dollars -= self.cost
-            player.hunger = max(0, player.hunger - self.facet_ratings['Food/Drinks'])
 
     def leave_review(self, player):
         fake_player_review = self.generate_review()
@@ -153,10 +154,11 @@ class Restaurant(Business):
 
     ordered_facets = ['Food/Drinks', 'Service', 'Cleanliness'] # ordered for display
 
-    def __init__(self, mean, review_count_mean, cost, room, bizname_data):
+    def __init__(self, mean, review_count_mean, cost, room, bizname_data, fulfillment_multiplier=4):
         libtcod.namegen_parse(REGION_NAME_CFG_PATH)
-        self.bizname_data = bizname_data
 
+        self.bizname_data = bizname_data
+        self.fulfillment_multiplier = fulfillment_multiplier
         self.owner = NPC()
         self.name = self.generate_name()
         self.true_rating = mean

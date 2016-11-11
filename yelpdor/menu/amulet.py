@@ -25,14 +25,11 @@ class Amulet(object):
         return self.menu_stack[-1]
 
     def draw(self, con):
+        self.current_menu().show()
         libtcod.console_blit(self.panel, 0, 0, 0, 0, con, self.x_pos, self.y_pos)
 
     def toggle(self):
         self.visible = not self.visible
-        if self.visible:
-            self.current_menu().show()
-        else:
-            libtcod.console_clear(self.panel)
 
     def keyboard_input(self, key):
         if key >= libtcod.KEY_0 and key <= libtcod.KEY_9:
