@@ -13,10 +13,10 @@ MAP_WIDTH = 256
  
 #actual size of the window
 SCREEN_HEIGHT = 64 
-SCREEN_WIDTH = 64
+SCREEN_WIDTH = 80
 
-CAMERA_HEIGHT = 64 
-CAMERA_WIDTH = 64
+CAMERA_HEIGHT = 60 
+CAMERA_WIDTH = 48
  
 LIMIT_FPS = 20  #20 frames-per-second maximum
  
@@ -51,7 +51,7 @@ def handle_keys():
 #############################################
  
 libtcod.console_set_custom_font('res/arial10x10.png', libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_TCOD)
-libtcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT, 'python/libtcod tutorial', False)
+libtcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT, 'Amulet of Yelpdor', False)
 libtcod.sys_set_fps(LIMIT_FPS)
 console = libtcod.console_new(SCREEN_WIDTH, SCREEN_HEIGHT)
  
@@ -69,7 +69,6 @@ renderer = Renderer(console, screen, camera)
 while not libtcod.console_is_window_closed():
     renderer.render(player, dungeon_objects, dungeon_map)
     libtcod.console_flush()
-    renderer.clear(dungeon_objects) 
     exit = handle_keys()
     if exit:
         break
