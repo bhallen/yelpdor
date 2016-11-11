@@ -5,7 +5,6 @@ from tile import TileType
 
 import lib.libtcodpy as libtcod
 
-
 color_dark_wall = libtcod.Color(0, 0, 100)
 color_dark_ground = libtcod.Color(50, 50, 150)
 
@@ -97,7 +96,7 @@ class Renderer:
 
         return con
 
-    def render(self, player, objects, dmap, amulet):
+    def render(self, player, objects, dmap, amulet, stats):
         camera = self.camera
         con = self.console
         screen = self.screen
@@ -105,7 +104,10 @@ class Renderer:
         map_console = self.render_map(player, objects, dmap)
         libtcod.console_blit(map_console, 0, 0, camera.width, camera.height, con, 1, 1)
 
-        # Draw amulet overlay
-        amulet.draw(con)
+        if amulet.visible:
+            # Draw amulet overlay
+            amulet.draw(con)
+        else:
+            stats.draw(con)
 
         libtcod.console_blit(con, 0, 0, screen.width, screen.height, 0, 0, 0)

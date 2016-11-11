@@ -7,6 +7,7 @@ from yelpdor.city import District
 from yelpdor.city_map_generator import generate_city_map
 from yelpdor.gui.messenger import Messenger
 from yelpdor.menu.amulet import Amulet
+from yelpdor.menu.stats import Stats
 from yelpdor.player import Player
 from yelpdor.renderer import Renderer
 from yelpdor.renderer import Screen
@@ -41,9 +42,9 @@ def handle_keys():
 
     elif key.c == ord('y') or key.c == ord('Y'):
         # Show/hide amulet
-        amulet.toggle_mode()
+        amulet.toggle()
 
-    elif (amulet.mode == amulet.AMULET_MODE
+    elif (amulet.visible
           and key.vk >= libtcod.KEY_0
           and key.vk <= libtcod.KEY_KP9):
         # If amulet is displayed, redirect numeric input to amulet
@@ -101,9 +102,10 @@ player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, '@', libtcod.white)
 dungeon_objects = [player]
 player.x, player.y = dungeon_map.spawn
 amulet = Amulet(player, 3, 3, district)
+stats = Stats(3, 3, player)
 
 while not libtcod.console_is_window_closed():
-    renderer.render(player, dungeon_objects, dungeon_map, amulet)
+    renderer.render(player, dungeon_objects, dungeon_map, amulet, stats)
     messenger.render()
     libtcod.console_flush()
     if handle_keys():
