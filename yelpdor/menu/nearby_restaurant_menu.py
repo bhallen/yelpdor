@@ -1,3 +1,5 @@
+import math
+
 from lib.libtcodpy import console_print
 from yelpdor.menu.amulet_menu import AmuletMenu
 from yelpdor.menu.amulet_menu import draw_menu
@@ -47,16 +49,6 @@ class NearbyRestaurantMenu(AmuletMenu):
 
     def get_biz_direction(self, biz, player):
         biz_x, biz_y = biz.business.room.rect.center()
-        if biz_y > player.y:
-            latdir = 'N'
-        elif biz_y < player.y:
-            latdir = 'S'
-        else:
-            latdir = ''
-        if biz_x > player.x:
-            longdir = 'E'
-        elif biz_x < player.x:
-            longdir = 'W'
-        else:
-            longdir = ''
-        return latdir + longdir
+        angle = math.atan2(biz_y - player.y, biz_x - player.x)
+        index = int((angle / (math.pi / 4)) + 8.5) % 8
+        return ['E', 'SE', 'S', 'SW', 'W', 'NW', 'N', 'NE'][index]
