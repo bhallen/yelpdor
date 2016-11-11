@@ -1,6 +1,8 @@
 import random
 import numpy.random
 
+import utils
+
 class Experience:
 
     def __init__(self, business):
@@ -22,23 +24,9 @@ class Experience:
 
     def initial_impression(self):
         quality = self.business.facet_ratings['Cleanliness']
-        events = {
-            1: EventSet(['You see insects crawling all over the floor. One of the chefs pokes her head out from the kitchen, '
-                    'stomps on a roach, and tosses it in her mouth.',
-                 "You notice a huge raccoon gnawing on a bone in the corner of the room. "
-                 "It pauses momentarily and glances at you calmly, then returns to its bone."],
-                [0.5, 0.5]),
-            2: EventSet(["There's a thick layer of dust and grime covering most of the tables."],
-                [1.0]),
-            3: EventSet(["There are some mysterious stains on your silverware, but otherwise the place looks tidy."],
-                [1.0]),
-            4: EventSet(["The restaurant looks like it's been remodeled recently, although it could use some dusting."],
-                [1.0]),
-            5: EventSet(["Everything from the legs of your chair to the waiters' foreheads is squeaky clean."],
-                [1.0])
-        }
+        events = utils.load_eventset('cleanliness')
 
-        return events[quality].sample()
+        return numpy.random.choice(events[str(quality)])
 
     def eating(self):
         quality = self.business.facet_ratings['Food/Drinks']
