@@ -7,28 +7,35 @@
         "Rodents scury over a floor stained with spilled drinks and food.",
         "Military latrines have better hygiene than this dump.",
         "The air is caustic, and the floor makes wet sucking sounds under your boots.",
-        "The cuts and scrapes you receive just getting to your seat already look infected."
+        "The cuts and scrapes you receive just getting to your seat already look infected.",
+        "Something horrible happened to you in the washroom. You don't want to talk about it."
    ],
     "2": [
         "There's a thick layer of dust and grime covering most of the tables.",
         "Spilled food and drink cover the floor in this dimly lit hole.",
-        "The tables look greasy and occasionally there is a faint whiff of garbage."
+        "The tables look greasy and occasionally there is a faint whiff of garbage.",
+        "The air in this place leaves you feeling nauseated.",
+        "Foul scents drift through the air, and the floor is stained with ... is that blood?"
     ],
     "3": [
         "There are some mysterious stains on your silverware, but otherwise the place looks tidy.",
         "Well worn furniture and fixtures, but at least its reasonably clean.",
         "Some cobwebs in the corners, but reasonably clean.",
-        ""
+        "The place is clean, but by a very loose definition of the word.",
+        "A well used and worn look, this place could use a little sprucing up."
     ],
     "4": [
         "The restaurant looks like it's been remodeled recently.",
         "Nicely lit and well kept.",
-        "Tables are bussed and the floor is swept."
+        "Tables are bussed and the floor is swept.",
+        "Pleasant atmosphere and a fresh scent in the air.",
+        "A warm and inviting atmosphere."
     ],
     "5":[
         "Everything from the legs of your chair to the waiters' foreheads is squeaky clean.",
         "Clean and well lit, the dirtiest thing in this place is clearly you.",
         "White linens and a subtle scent of lavender greet you as you open the door. This place is impeccably clean.",
-        "Clean and sparkling, you could eat of the floor."
+        "Clean and sparkling, you could eat of the floor.",
+        "The charming interior gives you a sense of calm and safety."
     ]
 }

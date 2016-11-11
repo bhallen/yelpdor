@@ -4,24 +4,37 @@
         "You didn't like the sly grin on the waiter's face as he delivered your food. Not one bit.",
         "You consider sending your food back as undercooked, but the waiter keeps tapping his belt knife impatiently.",
         "After spilling most of your meal on the floor, the waiter simply schlepped the ruined dish back on your plate.",
-        "The service was horrid. You were given a stab wound from the waiter to remember the experience by. Maybe he didn't like his tip."
+        "The service was horrid. You were given a stab wound from the waiter to remember the experience by. Maybe he didn't like his tip.",
+        "The waiter insulted you. It got really personal. He dug in deep, way over the line type stuff.",
+        "Asking for tap water shouldn't be answered with a slap in the face, should it?"
     ],
     "2": [
         "The not like the wait staff act like they don't want you to come back. They act like they never wanted you there in the first place.",
-        ""
+        "The disdain the staff have for their customers is written all over the walls. Literally.",
+        "The waiter delivers the wrong order to your table, and ignores your request for a drink refill.",
+        "You've seen dead sloths move faster than the staff in this place.",
+        "The staff mostly ignored the patrons, dropping food and drink on the table with a clatter."
     ],
     "3": [
         "The bored looking staff avoid eye contact and conversation, but at least the food arrived.",
-        "Adequate service.",
-        "Insipid conversation"
+        "Adequate service. I wanted more drink refills.",
+        "You could have done without the insipid conversation with the waiter.",
+        "The interactions with the staff aren't unpleasant, just forced.",
+        "The staff recite their well rehearsed script with an infectious lethargy.",
+        "The staff seem sedated, but your meal arrives as ordered."
     ],
     "4": [
         "Congenial and polite, the service was a cut above the rest.",
-        ""
+        "Desightful and agreeable, the staff make you feel right at home.",
+        "The staff create a cozy and cheerful atmostphere.",
+        "Prompt service with a smile, the staff are a delight.",
+        "The food is delivered promptly, and your cup is never empty for long."
     ],
     "5":[
         "Top notch service. The staff aim to please and succeed admirably.",
         "Prompt and courteous, the service was great.",
-        "The staff were coordinated and organized, you have seen ballets with less elegance."
+        "The staff were coordinated and organized, you have seen ballets with less elegance.",
+        "The staff manage to make every customer feel like a royalty at their own banquet.",
+        "The waiter was both congenial and respectful, fulfilling your every need with impressive speed and diligence."
     ]
 }
