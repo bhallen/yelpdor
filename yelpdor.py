@@ -1,3 +1,4 @@
+# pylint: skip-file
 import random
 
 from lib import libtcodpy as libtcod

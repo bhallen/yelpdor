@@ -2,6 +2,9 @@
 disable =
     missing-docstring,
     fixme,
+    file-ignored,
+    locally-disabled,
+    no-name-in-module,
 
 [REPORTS]
 output-format = colorized

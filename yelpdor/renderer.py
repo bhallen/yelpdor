@@ -1,14 +1,16 @@
+# pylint: skip-file
 from collections import namedtuple
 
-import lib.libtcodpy as libtcod
 from tile import TileType
 
-
-color_dark_wall = libtcod.Color(0,0,100)
-color_dark_ground = libtcod.Color(50,50,150)
+import lib.libtcodpy as libtcod
 
 
-Screen = namedtuple('Screen', ['width','height'])
+color_dark_wall = libtcod.Color(0, 0, 100)
+color_dark_ground = libtcod.Color(50, 50, 150)
+
+
+Screen = namedtuple('Screen', ['width', 'height'])
 
 
 TileDisp = namedtuple('TileDisp', ['char', 'bg', 'fg'])
@@ -30,7 +32,6 @@ class Renderer:
 
         # map_console is completely redrawn, but no need to fully recreate it each frame
         self.map_console = libtcod.console_new(camera.width, camera.height)
-
 
     def draw_tile(self, x, y, tile, in_fov):
         con = self.map_console
@@ -58,18 +59,16 @@ class Renderer:
                     libtcod.BKGND_NONE
                 )
         else:
-            libtcod.console_set_char_background(con, x, y, libtcod.Color(0, 0, 0), libtcod.BKGND_SET)
+            libtcod.console_set_char_background(con, x, y, libtcod.black, libtcod.BKGND_SET)
             libtcod.console_set_char(con, x, y, ' ')
 
-
     def draw_obj(self, con, x, y, obj):
-        #set the color and then draw the character that represents this object at its position
+        # set the color and then draw the character that represents this object at its position
 
         if x is not None:
-            #set the color and then draw the character that represents this object at its position
+            # set the color and then draw the character that represents this object at its position
             libtcod.console_set_default_foreground(con, obj.color)
             libtcod.console_put_char(con, x, y, obj.char, libtcod.BKGND_NONE)
-
 
     def render_map(self, player, objects, dmap):
         camera = self.camera
@@ -97,7 +96,6 @@ class Renderer:
         self.draw_obj(con, x, y, player)
 
         return con
-        
 
     def render(self, player, objects, dmap, amulet):
         camera = self.camera
