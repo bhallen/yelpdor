@@ -1,7 +1,17 @@
 import random
+import functools
+
 import numpy.random
 
 import utils
+
+
+FACET_EVENT_MAP = {
+    'Cleanliness': 'cleanliness',
+    'Food/Drinks': 'fooddrink',
+    'Service': 'service'
+}
+
 
 class Experience:
 
@@ -9,10 +19,9 @@ class Experience:
         self.business = business
         self.category_to_steps = {
             'Restaurant': [
-                (self.initial_impression, 1.0),
-                # (self.ordering, 1.0),
-                # (self.waiting, 1.0),
-                (self.eating, 1.0)
+                (functools.partial(self.facet_experience,'Cleanliness'), 1.0),
+                (functools.partial(self.facet_experience,'Food/Drink'), 1.0),
+                (functools.partial(self.facet_experience,'Service'), 1.0),
             ]
         }
 
@@ -22,18 +31,11 @@ class Experience:
             if random.random() < step[1]:
                 print step[0]()
 
-    def initial_impression(self):
-        quality = self.business.facet_ratings['Cleanliness']
-        events = utils.load_eventset('cleanliness')
+    def facet_experience(self, facet):
+        quality = self.business.facet_ratings[facet]
+        events = utils.load_eventset(FACET_EVENT_MAP[facet])
 
         return numpy.random.choice(events[str(quality)])
-
-    def eating(self):
-        quality = self.business.facet_ratings['Food/Drinks']
-        events = utils.load_eventset('fooddrink')
-
-        return numpy.random.choice(events[str(quality)])
-
 
 class EventSet:
 
