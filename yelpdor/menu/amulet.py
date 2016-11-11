@@ -48,10 +48,18 @@ class Amulet(object):
             raise Exception('Unsupported mode')
 
     def draw_stats(self, con):
-        console_print(con, self.x_pos, self.y_pos, 'Review count: {}'.format(
+        console_print(con, self.x_pos, self.y_pos, 'Health: {}%%'.format(
+            self.player.health))
+        console_print(con, self.x_pos, self.y_pos + 1, 'Hunger: {}%%'.format(
+            self.player.hunger))
+
+        console_print(con, self.x_pos, self.y_pos + 3, 'Money: ${}'.format(
+            self.player.dollars))
+
+        console_print(con, self.x_pos, self.y_pos + 5, 'Review count: {}'.format(
             self.player.review_count))
-        console_print(con, self.x_pos, self.y_pos + 1,
-                      'Reputation:   {}'.format(self.player.reputation))
+        console_print(con, self.x_pos, self.y_pos + 6, 'Fame level: {}'.format(
+            self.player.fame_level))
 
     def keyboard_input(self, key):
         # TODO - This should really be two separate classes: amulet and stats
