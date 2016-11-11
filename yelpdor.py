@@ -37,7 +37,12 @@ def handle_keys():
         return True  #exit game
 
     elif key.c == ord('y') or key.c == ord('Y'):
+        # Show/hide amulet
         amulet.toggle_mode()
+
+    elif amulet.mode == amulet.AMULET_MODE and key.vk >= libtcod.KEY_0 and key.vk <= libtcod.KEY_KP9:
+        # If amulet is displayed, redirect numeric input to amulet
+        amulet.keyboard_input(key.vk)
  
     #movement keys
     if libtcod.console_is_key_pressed(libtcod.KEY_UP):
