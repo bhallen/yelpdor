@@ -6,17 +6,25 @@ from yelpdor.city_map_generator import generate_city_map
 from yelpdor.player import Player
 from yelpdor.renderer import Renderer
 from yelpdor.renderer import Screen 
+<<<<<<< ebc41918eb8064076be5fdd1883036188c58284e
+=======
+from yelpdor.gui.messenger import Messenger
+from yelpdor.simple_dungeon import make_map
+>>>>>>> messenger gui bar
 
-#size of the map
-MAP_HEIGHT = 256
+
 MAP_WIDTH = 256 
+MAP_HEIGHT = 256
  
-#actual size of the window
 SCREEN_HEIGHT = 64 
 SCREEN_WIDTH = 80
 
 CAMERA_HEIGHT = 60 
 CAMERA_WIDTH = 48
+
+MESSENGER_WIDTH = SCREEN_WIDTH
+MESSENGER_HEIGHT = 16
+
  
 LIMIT_FPS = 20  #20 frames-per-second maximum
  
@@ -37,15 +45,19 @@ def handle_keys():
     #movement keys
     if libtcod.console_is_key_pressed(libtcod.KEY_UP):
         player.move(dungeon_map, 0, -1)
+        messenger.message("you moved UP")
  
     elif libtcod.console_is_key_pressed(libtcod.KEY_DOWN):
         player.move(dungeon_map, 0, 1)
+        messenger.message("you moved SOUTH")
  
     elif libtcod.console_is_key_pressed(libtcod.KEY_LEFT):
         player.move(dungeon_map, -1, 0)
+        messenger.message("you moved WEST")
  
     elif libtcod.console_is_key_pressed(libtcod.KEY_RIGHT):
         player.move(dungeon_map, 1, 0)
+        messenger.message("you moved WEST. Confused? Me too! We should get together and talk about it, maybe over beers! The problem is, with our sense of direction, we'd never find each other.")
  
  
 #############################################
@@ -67,10 +79,11 @@ screen = Screen(width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
 camera = Camera(CAMERA_WIDTH, CAMERA_HEIGHT, dungeon_map) 
 renderer = Renderer(console, screen, camera)
 amulet = Amulet(player, 3, 3)
+messenger = Messenger(
+    width=MESSENGER_WIDTH,
+    height=MESSENGER_HEIGHT,
+    screen=screen)
+
 
 while not libtcod.console_is_window_closed():
     renderer.render(player, dungeon_objects, dungeon_map, amulet)
-    libtcod.console_flush()
-    exit = handle_keys()
-    if exit:
-        break
