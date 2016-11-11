@@ -51,22 +51,17 @@ def handle_keys():
         amulet.keyboard_input(key.vk)
 
     # movement keys
-    if libtcod.console_is_key_pressed(libtcod.KEY_UP) and player.health > 0:
+    if libtcod.console_is_key_pressed(libtcod.KEY_UP) and player.char != 'X':
         player.move(dungeon_map, 0, -1)
 
-    elif libtcod.console_is_key_pressed(libtcod.KEY_DOWN) and player.health > 0:
+    elif libtcod.console_is_key_pressed(libtcod.KEY_DOWN) and player.char != 'X':
         player.move(dungeon_map, 0, 1)
 
-    elif libtcod.console_is_key_pressed(libtcod.KEY_LEFT) and player.health > 0:
+    elif libtcod.console_is_key_pressed(libtcod.KEY_LEFT) and player.char != 'X':
         player.move(dungeon_map, -1, 0)
 
-    elif libtcod.console_is_key_pressed(libtcod.KEY_RIGHT) and player.health > 0:
+    elif libtcod.console_is_key_pressed(libtcod.KEY_RIGHT) and player.char != 'X':
         player.move(dungeon_map, 1, 0)
-
-    # TEMPORARY: press r to review a business
-    elif key.c == ord('r'):
-        biz = random.choice(district.businesses)
-        biz.visit(player)
 
 
 #############################################
