@@ -28,7 +28,8 @@ class Player(GameObj):
 
     def move(self, dmap, dx, dy):
         # move by the given amount, if the destination is not blocked
-        if not dmap[self.x + dx][self.y + dy].blocked:
+        if (dmap.within_map(self.x + dx, self.y + dy) and
+                not dmap[self.x + dx][self.y + dy].blocked):
             self.x += dx
             self.y += dy
             self.tick()
