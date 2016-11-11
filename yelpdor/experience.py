@@ -30,21 +30,9 @@ class Experience:
 
     def eating(self):
         quality = self.business.facet_ratings['Food/Drinks']
-        events = {
-            1: EventSet(['Food is 1.',
-                 "Food is 1... you think."],
-                [0.5, 0.5]),
-            2: EventSet(["Food is 2."],
-                [1.0]),
-            3: EventSet(["Food is 3."],
-                [1.0]),
-            4: EventSet(["Food is 4."],
-                [1.0]),
-            5: EventSet(["Food is 5."],
-                [1.0])
-        }
+        events = utils.load_eventset('fooddrink')
 
-        return events[quality].sample()
+        return numpy.random.choice(events[str(quality)])
 
 
 class EventSet:
