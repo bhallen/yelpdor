@@ -25,6 +25,7 @@
     "Ramen",
     "Seafood",
     "Surf and Turf",
+    "Pizza",
     "Sushi",
     "Taco",
     "TexMex",
@@ -43,6 +44,7 @@
     "Parlor",
     "Pub",
     "Shack",
+    "Hut",
     "House"
   ],
   "food_suffix": [

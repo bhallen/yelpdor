@@ -159,7 +159,7 @@ class Restaurant(Business):
 
     ordered_facets = ['Food/Drinks', 'Service', 'Cleanliness'] # ordered for display
 
-    def __init__(self, mean, review_count_mean, cost, room, bizname_data, fulfillment_multiplier=10):
+    def __init__(self, mean, review_count_mean, cost, room, bizname_data, fulfillment_multiplier=5):
         libtcod.namegen_parse(REGION_NAME_CFG_PATH)
 
         self.visited = False
