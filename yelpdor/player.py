@@ -58,8 +58,10 @@ class Player(GameObj):  # pylint: disable=too-many-instance-attributes
         elif self.hunger == 100:
             if self.health > 30:
                 Messenger().message('You are starving to death.')
+                Messenger().message('')
             else:
                 Messenger().message('You are literally starving to death. Quite literally.')
+                Messenger().message('')
             self.health -= 1
         else:
             self.hunger += 1
@@ -68,8 +70,10 @@ class Player(GameObj):  # pylint: disable=too-many-instance-attributes
                     self.health = self.health + 1
             if self.hunger > 40 and self.hunger < 80 and self.hunger % 10 == 0:
                 Messenger().message('You are hungry.')
+                Messenger().message('')
             elif self.hunger >= 80 and self.hunger % 3 == 0:
                 Messenger().message('You are very hungry.')
+                Messenger().message('')
 
     def update_reviewing_stats(self, player_review, business):
         self.review_count += 1
@@ -86,3 +90,4 @@ class Player(GameObj):  # pylint: disable=too-many-instance-attributes
         payment = int(round(self.review_count * self.reputation))
         self.dollars += payment
         Messenger().message('You received {} dollars from your fans.'.format(payment))
+        Messenger().message('')
