@@ -19,8 +19,8 @@ class Experience:
         self.category_to_steps = {
             'Restaurant': [
                 (functools.partial(self.facet_experience,'Cleanliness'), 1.0),
-                (functools.partial(self.facet_experience,'Food/Drinks'), 1.0),
                 (functools.partial(self.facet_experience,'Service'), 1.0),
+                (functools.partial(self.facet_experience,'Food/Drinks'), 1.0),
             ]
         }
 

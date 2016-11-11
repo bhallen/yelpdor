@@ -227,6 +227,9 @@ class Review:
     def __repr__(self):
         return '\n'.join(['> > {}: {}'.format(facet, format_rating(self.ratings[facet])) for facet in self.ordered_facets])
 
+    def __str__(self):
+        return ' '.join(['{}: {}'.format(facet, format_rating(self.ratings[facet])) for facet in self.ordered_facets])
+
 
 def format_rating(rating):
     if rating > 0:
