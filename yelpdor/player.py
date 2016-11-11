@@ -19,6 +19,13 @@ class Player(GameObj):
         self.ticks_between_hunger_ticks = 1
         self.current_business = ''
 
+        self.dungeon_map = None
+        self.district = None
+
+    def set_level(self, dungeon_map, district):
+        self.dungeon_map = dungeon_map
+        self.district = district
+
     def move(self, dmap, dx, dy):
         # move by the given amount, if the destination is not blocked
         if not dmap[self.x + dx][self.y + dy].blocked:
@@ -32,6 +39,13 @@ class Player(GameObj):
             self.tick_hunger()
         if self.total_ticks % self.ticks_between_payments == 0 and self.fame_level > 0:
             self.receive_payment()
+
+        if self.district:
+            # check position for events
+            player_business = self.district.find_business_containing_player(self)
+            if player_business and self.current_business != player_business:
+                self.current_business = player_business
+                self.current_business.visit(self)
 
     def tick_hunger(self):
         if self.health == 0:

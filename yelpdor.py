@@ -14,10 +14,10 @@ from yelpdor.renderer import Screen
 MAP_WIDTH = 256
 MAP_HEIGHT = 256
 
-SCREEN_HEIGHT = 64
+SCREEN_HEIGHT = 50
 SCREEN_WIDTH = 80
 
-CAMERA_HEIGHT = 60
+CAMERA_HEIGHT = 40
 CAMERA_WIDTH = 48
 
 MESSENGER_WIDTH = SCREEN_WIDTH
@@ -66,12 +66,6 @@ def handle_keys():
         biz = random.choice(district.businesses)
         biz.visit(player)
 
-    # check position for events
-    player_business = district.find_business_containing_player(player)
-    if player_business and player.current_business != player_business:
-        player.current_business = player_business
-        Messenger().message('You are inside the business {}.'.format(player_business.name))
-
 
 #############################################
 # Initialization & Main Loop
@@ -99,6 +93,8 @@ messenger = Messenger(
 player = Player(dungeon_map.spawn[0], dungeon_map.spawn[1], '@', libtcod.white)
 dungeon_map.objects.append(player)
 amulet = Amulet(player, 3, 3, district)
+
+player.set_level(dungeon_map, district)
 
 while not libtcod.console_is_window_closed():
     renderer.render(player, dungeon_map, amulet)

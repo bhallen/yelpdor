@@ -127,16 +127,19 @@ class Business:
 
     def visit(self, player):
         if player.dollars < self.cost:
-             Messenger().message('You find a restaurant, but you can\'t afford to eat there.')
+             Messenger().message('You can\'t afford to eat here.')
         else:
-            player.dollars -= self.cost
             e = Experience(self)
             e.describe()
-            player.hunger = max(0, player.hunger - self.facet_ratings['Food/Drinks'])
-            fake_player_review = self.generate_review()
-            Messenger().message('You leave a review of {}...'.format(self.name))
             Messenger().message(' ')
-            player.update_reviewing_stats(fake_player_review, self)
+            player.dollars -= self.cost
+            player.hunger = max(0, player.hunger - self.facet_ratings['Food/Drinks'])
+
+    def leave_review(self, player):
+        fake_player_review = self.generate_review()
+        Messenger().message('You leave a review of {}...'.format(self.name))
+        Messenger().message(' ')
+        player.update_reviewing_stats(fake_player_review, self)
 
 
 class Restaurant(Business):
