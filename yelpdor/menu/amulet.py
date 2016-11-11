@@ -2,7 +2,7 @@ from collections import namedtuple
 
 from lib import libtcodpy as libtcod
 from lib.libtcodpy import console_print
-from yelpdor.menu.amulet_menu import MainMenu
+from yelpdor.menu.main_menu import MainMenu
 
 PANEL_WIDTH = 30
 PANEL_HEIGHT = 15
