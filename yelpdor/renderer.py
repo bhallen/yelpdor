@@ -71,7 +71,7 @@ class Renderer:
             libtcod.console_put_char(con, x, y, obj.char, libtcod.BKGND_NONE)
 
 
-    def render_map(self, player, objects, dmap):
+    def render_map(self, player, dmap):
         camera = self.camera
         con = self.map_console
 
@@ -88,23 +88,23 @@ class Renderer:
                 in_fov = libtcod.map_is_in_fov(dmap.fov_map, map_x, map_y)
                 self.draw_tile(x, y, tile, in_fov)
 
-        for obj in objects:
+        for obj in dmap.objects:
             if obj != player:
-                (x, y) = camera.convert_coordinates(obj.x, obj.y)
-                if libtcod.map_is_in_fov(dmap.fov_map, x, y):
+                if libtcod.map_is_in_fov(dmap.fov_map, obj.x, obj.y):
+                    (x, y) = camera.convert_coordinates(obj.x, obj.y)
                     self.draw_obj(con, x, y, obj)
-        (x, y) = camera.convert_coordinates(obj.x, obj.y)
+        (x, y) = camera.convert_coordinates(player.x, player.y)
         self.draw_obj(con, x, y, player)
 
         return con
         
 
-    def render(self, player, objects, dmap, amulet):
+    def render(self, player, dmap, amulet):
         camera = self.camera
         con = self.console
         screen = self.screen
 
-        map_console = self.render_map(player, objects, dmap)
+        map_console = self.render_map(player, dmap)
         libtcod.console_blit(map_console, 0, 0, camera.width, camera.height, con, 1, 1)
 
         # Draw amulet overlay

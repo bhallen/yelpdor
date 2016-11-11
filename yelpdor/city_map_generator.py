@@ -4,6 +4,8 @@ from tile import TileType
 from tile import create_tile
 from tile import Rect
 from dungeon_map import DungeonMap
+from dungeon_map import Room
+
 
 MIN_BLOCK_SIZE = 25
 MAX_BLOCK_SIZE = 50
@@ -11,7 +13,8 @@ MAX_BLOCK_SIZE = 50
 MIN_BIZ_SIZE = 5
 MAX_BIZ_SIZE = 12
 
-BIZ_IN_ROOM_PROPORTION = 1.0
+BIZ_IN_ROOM_PROPORTION = 0.2
+
 
 def divide_line(length, min_size, max_size):
     # generates dividers in the range 0 <= i < length
@@ -112,7 +115,7 @@ def generate_city_map(width, height, district):
                     dmap[x][y] = create_tile(TileType.wall)
                 else:
                     dmap[x][y] = create_tile(TileType.floor)
-        dmap.rooms.append(Rect(rect.x1 + 1, rect.y1 + 1, rect.w - 2, rect.h - 2))
+        dmap.rooms.append(Room(Rect(rect.x1 + 1, rect.y1 + 1, rect.w - 2, rect.h - 2), None))
 
     def fill_block(block):
         # used to make sure rooms don't intersect each other
@@ -198,24 +201,32 @@ def generate_city_map(width, height, district):
 
     # create doors for all the rooms
     for room in dmap.rooms:
+        rect = room.rect
         good_spots = []
-        cx, cy = room.center()
-        if dmap[room.x1 - 2][cy].tile_type == TileType.street:
-            good_spots += [(room.x1 - 1, y) for y in range(room.y1 + 1, room.y2)]
-        if dmap[room.x2 + 1][cy].tile_type == TileType.street:
-            good_spots += [(room.x2, y) for y in range(room.y1 + 1, room.y2)]
-        if dmap[cx][room.y1 - 2].tile_type == TileType.street:
-            good_spots += [(x, room.y1 - 1) for x in range(room.x1 + 1, room.x2)]
-        if dmap[cx][room.y2 + 1].tile_type == TileType.street:
-            good_spots += [(x, room.y2) for x in range(room.x1 + 1, room.x2)]
+        cx, cy = rect.center()
+        if dmap[rect.x1 - 2][cy].tile_type == TileType.street:
+            good_spots += [(rect.x1 - 1, y) for y in range(rect.y1 + 1, rect.y2)]
+        if dmap[rect.x2 + 1][cy].tile_type == TileType.street:
+            good_spots += [(rect.x2, y) for y in range(rect.y1 + 1, rect.y2)]
+        if dmap[cx][rect.y1 - 2].tile_type == TileType.street:
+            good_spots += [(x, rect.y1 - 1) for x in range(rect.x1 + 1, rect.x2)]
+        if dmap[cx][rect.y2 + 1].tile_type == TileType.street:
+            good_spots += [(x, rect.y2) for x in range(rect.x1 + 1, rect.x2)]
         if len(good_spots) > 0:
             door_x, door_y = random.choice(good_spots)
-            dmap[door_x][door_y] = create_tile(TileType.door)
+            room.door = (door_x, door_y)
+            dmap[door_x][door_y] = create_tile(TileType.floor)
 
-    # create businesses
     random.shuffle(dmap.rooms)
-    for i, room in enumerate(dmap.rooms):
-        if float(i) / len(dmap.rooms) < BIZ_IN_ROOM_PROPORTION:
-            district.add_business(room)
+    # assign businesses to rooms
+    rooms_to_generate = int(len(dmap.rooms) * BIZ_IN_ROOM_PROPORTION)
+    for room in dmap.rooms[:rooms_to_generate]:
+        biz = district.add_business(room)
+        door_x, door_y = room.door
+        dmap[door_x][door_y] = create_tile(TileType.door)
+        if biz.owner:
+            # spawn the owner inside the business
+            biz.owner.x, biz.owner.y = biz.room.rect.center()
+            dmap.objects.append(biz.owner)
 
     return dmap

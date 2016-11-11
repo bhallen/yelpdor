@@ -8,9 +8,12 @@ import lib.libtcodpy as libtcod
 from yelpdor.experience import Experience
 from yelpdor.gui.messenger import Messenger
 from yelpdor.npc import NPC
+from yelpdor.tile import create_tile
+from yelpdor.tile import TileType
 
 BIZ_COUNT = 10
 BIZ_TRUE_RATING_DISTRIBUTION = [0.2, 0.2, 0.2, 0.2, 0.2]
+
 
 FACET_SD = 1.5
 FACET_REVIEW_SD = 1.5
@@ -46,12 +49,14 @@ class District:
         return self.__repr__()
 
     def add_business(self, room):
-        self.businesses.append(
-            Restaurant(numpy.random.choice(range(1, 6), p=self.distribution),
-                       self.review_count_mean,
-                       RESTAURANT_COST,
-                       room)
+        biz = Restaurant(
+           numpy.random.choice(range(1, 6), p=self.distribution),
+           self.review_count_mean,
+           RESTAURANT_COST,
+           room
         )
+        self.businesses.append(biz)
+        return biz
 
     def find_business_containing_player(self, player):
         for biz in self.businesses:

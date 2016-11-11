@@ -2,6 +2,7 @@ import random
 
 import lib.libtcodpy as libtcod
 from tile import Tile
+from tile import Rect
 
 
 FOV_ALGO = 0  #default FOV algorithm
@@ -15,6 +16,7 @@ class DungeonMap:
     __map__ = [] 
     rooms = []
     spawn = (0, 0)
+    objects = []
 
     def __init__(self, width, height):
         self.width = width
@@ -47,3 +49,13 @@ class DungeonMap:
             libtcod.map_compute_fov(self.fov_map, x, y, VIEW_RADIUS, FOV_LIGHT_WALLS, FOV_ALGO)
             self.fov_x = x
             self.fov_y = y
+
+
+class Room:
+    
+    def __init__(self, rect, door=None):
+        self.rect = rect
+        self.door = door
+
+    def contains(self, x, y):
+        return self.rect.contains(x, y)
