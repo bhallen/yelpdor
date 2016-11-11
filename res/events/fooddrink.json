@@ -1,18 +1,36 @@
 {
     "1": [
         "The drink is undrinkable, and the food is so undercooked, a skilled veterinarian might still be able to save it.",
-        "Calling the drink 'undrinkable swill' would be unfair to 'undrinkable swill'. You would try the food, but it won't stop moving."
+        "Calling the drink 'undrinkable swill' would be unfair to 'undrinkable swill'. You would try the food, but it won't stop moving.",
+        "So foul, the writhing maggots were more appetizing than the food they infested. And probably more nutritious too.",
+        "You might have eaten some of the food you ordered, but you prefer your meals to be delivered undigested.",
+        "You order food, but receive a plate full of nightmares.",
+        "With years of counselling, you might have recovered from the main course, but nothing will undo the horrors of the desserts",
+        "You try to wash the horrid tasting food down with a drink, but the caustic liquid has eaten through the cup and escaped onto the floor."
     ],
     "2": [
-        "How can a dish be overcooked AND undercooked at the same time? The drinks taste like the cup, and the cup tastes moldy."
+        "How can a dish be overcooked AND undercooked at the same time?",
+        "The drinks taste like the cup, and the cup tastes moldy.",
+        "You might have taken some of the food home in a doggybag, but all of the dogs you know have better taste.",
+        "You would be surprised if a starving animal could find something worth eating here.",
+        "If the smell was the worst part of the food, you might have choked more of your meal down.", 
+        "The food smelled worse than it looked, and tasted worse than it smelled.",
+        "You order the food, but only receive a plate full of regret."
     ],
     "3": [
-        "Forgettable fare, you can't seem to remember what it tasted like moments after your last bite."
+        "Forgettable fare, you can't seem to remember what it tasted like moments after your last bite.",
+        "The only memorable thing about the food and drink is just how unmemorable it was.",
+        "Edible fare, but just barely.",
+        "Food is uninspired and uninteresting."
     ],
     "4": [
-        "The food is delicious, not the best you've had, but a cut above the rest."
+        "The food is delicious, not the best you've had, but a cut above the rest.",
+        "Nourishing and delicious, you savour every bite.",
+        "",
     ],
     "5":[
-        "The drinks were divine nectar, and the food a livechanging experience."
+        "The drinks were divine nectar, and the food a livechanging experience.",
+        "The food was fit for Emperors and Kings, paired with the perfect wine or spirit for every course.",
+        "Every course is better than the last."
     ]
 }

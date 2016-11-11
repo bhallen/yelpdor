@@ -4,17 +4,21 @@
         "You notice a huge raccoon gnawing on a bone in the corner of the room. It pauses momentarily and glances at you calmly, then returns to its bone.",
         "An overwhelming stench permeates the room, and you are unsure whether it's coming from the patrons, the staff, or the food.",
         "Dirty tables strewn with uneaten food and used dishes. Some of the bolder rats have climbed up to claim the leftovers.",
-        "Rodents scury over a floor stained with spilled drinks and food."
+        "Rodents scury over a floor stained with spilled drinks and food.",
+        "Military latrines have better hygiene than this dump.",
+        "The air is caustic, and the floor makes wet sucking sounds under your boots.",
+        "The cuts and scrapes you receive just getting to your seat already look infected."
    ],
     "2": [
         "There's a thick layer of dust and grime covering most of the tables.",
         "Spilled food and drink cover the floor in this dimly lit hole.",
-        "The tables look greasy and occasionally there is a faint whiff of garbage"
+        "The tables look greasy and occasionally there is a faint whiff of garbage."
     ],
     "3": [
         "There are some mysterious stains on your silverware, but otherwise the place looks tidy.",
         "Well worn furniture and fixtures, but at least its reasonably clean.",
-        "Some cobwebs in the corners, but reasonably clean."
+        "Some cobwebs in the corners, but reasonably clean.",
+        ""
     ],
     "4": [
         "The restaurant looks like it's been remodeled recently.",
