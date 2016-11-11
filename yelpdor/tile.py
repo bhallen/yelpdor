@@ -47,6 +47,7 @@ class Tile:
         self.block_sight = block_sight
 
         self.tile_type = tile_type
+        self.explored = False
 
 # creates a tile based on the type
 def create_tile(tile_type):

@@ -36,23 +36,30 @@ class Renderer:
         con = self.map_console
         tile_disp = TILE_DISPS[tile.tile_type]
 
+        if in_fov:
+            tile.explored = True
+
         color_mult = 1.0 if in_fov else 0.5
         bg = tile_disp.bg * color_mult if tile_disp.bg else None
         fg = tile_disp.fg * color_mult if tile_disp.fg else None
 
-        if tile_disp.char == ' ':
-            libtcod.console_set_char_background(con, x, y, bg, libtcod.BKGND_SET)
-            libtcod.console_set_char(con, x, y, ' ')
+        if tile.explored:
+            if tile_disp.char == ' ':
+                libtcod.console_set_char_background(con, x, y, bg, libtcod.BKGND_SET)
+                libtcod.console_set_char(con, x, y, ' ')
+            else:
+                libtcod.console_set_char_background(con, x, y, bg, libtcod.BKGND_SET)
+                libtcod.console_set_default_foreground(con, fg)
+                libtcod.console_put_char(
+                    con,
+                    x,
+                    y,
+                    tile_disp.char,
+                    libtcod.BKGND_NONE
+                )
         else:
-            libtcod.console_set_char_background(con, x, y, bg, libtcod.BKGND_SET)
-            libtcod.console_set_default_foreground(con, fg)
-            libtcod.console_put_char(
-                con,
-                x,
-                y,
-                tile_disp.char,
-                libtcod.BKGND_NONE
-            )
+            libtcod.console_set_char_background(con, x, y, libtcod.Color(0, 0, 0), libtcod.BKGND_SET)
+            libtcod.console_set_char(con, x, y, ' ')
 
 
     def draw_obj(self, con, x, y, obj):
@@ -84,7 +91,8 @@ class Renderer:
         for obj in objects:
             if obj != player:
                 (x, y) = camera.convert_coordinates(obj.x, obj.y)
-                self.draw_obj(con, x, y, obj)
+                if libtcod.map_is_in_fov(dmap.fov_map, x, y):
+                    self.draw_obj(con, x, y, obj)
         (x, y) = camera.convert_coordinates(obj.x, obj.y)
         self.draw_obj(con, x, y, player)
 
