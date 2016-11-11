@@ -5,7 +5,6 @@
     "{food} {food_suffix}",
     "{modifier} {food} {food_suffix}",
     "Cafe {cafe_name}",
-    "{modifier} {restaurant_type}",
     "{region}",
     "The {noun}'s {restaurant_type}",
     "{noun} {restaurant_type}"
@@ -44,7 +43,6 @@
     "Parlor",
     "Pub",
     "Shack",
-    "Shop",
     "House"
   ],
   "food_suffix": [

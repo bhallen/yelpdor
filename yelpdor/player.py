@@ -54,6 +54,7 @@ class Player(GameObj):  # pylint: disable=too-many-instance-attributes
     def tick_hunger(self):
         if self.health == 0:
             Messenger().message('You are dead.')
+            self.char = 'X'
         elif self.hunger == 100:
             if self.health > 30:
                 Messenger().message('You are starving to death.')
