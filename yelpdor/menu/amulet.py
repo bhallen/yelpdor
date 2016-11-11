@@ -1,10 +1,10 @@
 from collections import namedtuple
 
 from lib import libtcodpy as libtcod
-from yelpdor.menu.main_menu import MainMenu
+from yelpdor.menu.main_menu import NearbyRestaurantMenu
 
 PANEL_WIDTH = 31
-PANEL_HEIGHT = 15
+PANEL_HEIGHT = 24
 
 MenuOption = namedtuple('MenuOption', ['name', 'function'])
 
@@ -17,9 +17,9 @@ class Amulet(object):
         self.y_pos = y
 
         self.panel = libtcod.console_new(PANEL_WIDTH, PANEL_HEIGHT)
-        self.visible = False
+        self.visible = True
         self.menu_stack = []
-        self.menu_stack.append(MainMenu(self.panel, player, district))
+        self.menu_stack.append(NearbyRestaurantMenu(self.panel, player, district))
 
     def current_menu(self):
         return self.menu_stack[-1]

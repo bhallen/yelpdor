@@ -20,7 +20,7 @@ class NearbyRestaurantMenu(AmuletMenu):
 
     @draw_menu
     def show(self):
-        self.sorted_restaurants = self.district.sorted_by_distance(self.player)[:6]
+        self.sorted_restaurants = self.district.sorted_by_distance(self.player)[:10]
         self.restaurant_menus = [RestaurantMenu(self.panel, r) for r in self.sorted_restaurants]
         line_num = 0
         console_print(self.panel, 0, line_num,
@@ -29,17 +29,17 @@ class NearbyRestaurantMenu(AmuletMenu):
         for num, restaurant in enumerate(self.restaurant_menus, start=0):
             line_num += 2
             msg = '{}. {} ({})'.format(num,
-                                                       restaurant.business.name[:12] + '...' if len(
-                                                           restaurant.business.name) > 14 else restaurant.business.name.ljust(15),
+                                                       restaurant.business.name[:18] + '...' if len(
+                                                           restaurant.business.name) > 20 else restaurant.business.name.ljust(21),
                                                        self.get_biz_direction(restaurant, self.player))
             console_print(self.panel, 0, line_num, msg)
             msg = '     {}, {} reviews'.format(format_rating(restaurant.business.rounded_aggregated_overall_rating),
                                                restaurant.business.review_count)
             console_print(self.panel, 0, line_num + 1, msg)
 
-        line_num += 2
-        exit_msg = '{}. {}'.format(len(self.restaurant_menus), 'Exit')
-        console_print(self.panel, 0, line_num, exit_msg)
+        # line_num += 2
+        # exit_msg = '{}. {}'.format(len(self.restaurant_menus), 'Exit')
+        # console_print(self.panel, 0, line_num, exit_msg)
 
     def select_option(self, num):
         if num >= len(self.restaurant_menus):

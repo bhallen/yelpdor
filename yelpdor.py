@@ -20,7 +20,7 @@ SCREEN_HEIGHT = 50
 SCREEN_WIDTH = 80
 
 CAMERA_HEIGHT = 33
-CAMERA_WIDTH = 48
+CAMERA_WIDTH = 47
 
 MESSENGER_WIDTH = SCREEN_WIDTH
 MESSENGER_HEIGHT = 16
@@ -40,9 +40,9 @@ def handle_keys():
     elif key.vk == libtcod.KEY_ESCAPE:
         return True  # exit game
 
-    elif key.c == ord('y') or key.c == ord('Y'):
-        # Show/hide amulet
-        amulet.toggle()
+    # elif key.c == ord('y') or key.c == ord('Y'):
+    #     # Show/hide amulet
+    #     amulet.toggle()
 
     elif (amulet.visible
           and key.vk >= libtcod.KEY_0
@@ -94,8 +94,8 @@ messenger = Messenger(
 
 player = Player(dungeon_map.spawn[0], dungeon_map.spawn[1], '@', libtcod.white)
 dungeon_map.objects.append(player)
-amulet = Amulet(player, 3, 3, district)
-stats = Stats(3, 3, player)
+stats = Stats(48, 3, player)
+amulet = Amulet(player, 48, 12, district)
 
 player.set_level(dungeon_map, district)
 
