@@ -78,7 +78,7 @@ def handle_keys():
 #############################################
 
 libtcod.console_set_custom_font(
-    'res/arial10x10.png', libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_TCOD)
+    'res/dejavu16x16_gs_tc.png', libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_TCOD)
 libtcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT,
                           'Amulet of Yelpdor', False)
 libtcod.sys_set_fps(LIMIT_FPS)
