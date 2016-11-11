@@ -126,7 +126,9 @@ class Business:
         return raw_difference if raw_difference >= 0 else 0
 
     def visit(self, player):
-        if player.dollars < self.cost:
+        if self.visited:
+            Messenger().message('You\'ve already visited this business. Try going somewhere else.')
+        elif player.dollars < self.cost:
              Messenger().message('You can\'t afford to eat here.')
         else:
             e = Experience(self)
@@ -136,6 +138,7 @@ class Business:
             player.dollars -= self.cost
 
     def leave_review(self, player):
+        self.visited = True
         fake_player_review = self.generate_review()
         Messenger().message('You leave a review of {}...'.format(self.name))
         Messenger().message(' ')
@@ -158,6 +161,7 @@ class Restaurant(Business):
     def __init__(self, mean, review_count_mean, cost, room, bizname_data, fulfillment_multiplier=4):
         libtcod.namegen_parse(REGION_NAME_CFG_PATH)
 
+        self.visited = False
         self.bizname_data = bizname_data
         self.fulfillment_multiplier = fulfillment_multiplier
         self.owner = NPC()

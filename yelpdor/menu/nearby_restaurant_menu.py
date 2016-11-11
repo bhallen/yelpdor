@@ -21,7 +21,7 @@ class NearbyRestaurantMenu(AmuletMenu):
     @draw_menu
     def show(self):
         self.sorted_restaurants = self.district.sorted_by_distance(self.player)[:10]
-        self.restaurant_menus = [RestaurantMenu(self.panel, r) for r in self.sorted_restaurants]
+        self.restaurant_menus = [RestaurantMenu(self.panel, r) for r in self.sorted_restaurants if not r.visited]
         line_num = 0
         console_print(self.panel, 0, line_num,
                       'Restaurants (nearest first):')
