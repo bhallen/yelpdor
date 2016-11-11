@@ -47,6 +47,9 @@ class Player(GameObj):  # pylint: disable=too-many-instance-attributes
             if player_business and self.current_business != player_business:
                 self.current_business = player_business
                 self.current_business.visit(self)
+            elif not player_business and self.current_business:
+                self.current_business.leave_review(self)
+                self.current_business = None
 
     def tick_hunger(self):
         if self.health == 0:
