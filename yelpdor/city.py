@@ -6,6 +6,7 @@ import random
 import lib.libtcodpy as libtcod
 
 from yelpdor.experience import Experience
+from yelpdor.gui.messenger import Messenger
 from yelpdor.npc import NPC
 
 BIZ_COUNT = 10
@@ -96,7 +97,7 @@ class Business:
 
     def visit(self, player):
         if player.dollars < self.cost:
-            print 'You find a restaurant, but you can\'t afford to eat there.'
+             'You find a restaurant, but you can\'t afford to eat there.'
         else:
             player.dollars -= self.cost
             e = Experience(self)
@@ -104,8 +105,8 @@ class Business:
             player.hunger -= self.facet_ratings['Food/Drinks']
             fake_player_review = self.generate_review()
             review_accuracy = player.update_reviewing_stats(fake_player_review, self)
-            print 'You leave a review of {}...'.format(self.name)
-            print '...and the review\'s accuracy is {}!'.format(review_accuracy)
+            Messenger().message('You leave a review of {}...'.format(self.name))
+            Messenger().message('...and the review\'s accuracy is {}!'.format(review_accuracy))
 
 
 class Restaurant(Business):
