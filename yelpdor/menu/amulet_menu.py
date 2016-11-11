@@ -10,11 +10,11 @@ def draw_menu(func):
     Wraps the drawing of menus to clear and initialize the canvas.
     '''
 
-    def decorator(self):
+    def decorator(self, *args, **kwargs):
         libtcod.console_set_default_background(self.panel, libtcod.light_red)
         libtcod.console_clear(self.panel)
 
-        func(self)
+        func(self, *args, **kwargs)
     return decorator
 
 

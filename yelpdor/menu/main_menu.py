@@ -31,4 +31,4 @@ class MainMenu(AmuletMenu):
         if num >= len(self.menu):
             # Ignore invalid menu options
             return
-        self.menu[num].show()
+        return self.menu[num]
